@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Reportes</title>
+
+    <script type="text/javascript">
+      function lanza() {
+        document.cookie="user=emma";
+        document.cookie="descrip=123";
+      }
+      function jlimpiar(cook){
+          //alert("entra a borrar: " + cook);
+          if (cook === undefined) {
+            var cookies = document.cookie.split(";");
+              for (var i = 0; i < cookies.length; i++) {
+                  //alert("ema");
+                  var cookie = cookies[i];
+                  var eqPos = cookie.indexOf("=");
+                  var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+                  document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+              }
+          }else{
+            document.cookie = cook + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+            document.cookie = " "+cook + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+          }
+      };
+      function boob(){
+        document.cookie = "user=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+      }
+    </script>
+
+  </head>
+  <body class="skin-blue">
+          <button onclick="lanza()">lanza</button>
+          <button onclick="alert(document.cookie);">cook</button>
+          <button onclick="jlimpiar()">limpiar</button>
+          <button onclick="boob()">boob</button>
+         
+  </body>
+</html>

@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Potenciometro</title>
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css" />
+    <link href="../dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css" />
+    <link href="../dist/css/skins/_all-skins.min.css" rel="stylesheet" type="text/css" />
+    <script src="../js/jquery-3.3.1.js"></script>
+    <style type="text/css">
+      .inboxx{
+        background-color: #dd4b39;
+        display: block;
+        width: 80%;
+        margin-bottom: 15px;
+        text-align: center;
+        height: 77px;
+      }
+      .inboxx > b{
+        font-size: 2.2em;
+      }
+      .inboxx > label{
+        font-size: 1em;
+        padding-top: 10px;
+      }
+    </style>
+    <script type="text/javascript">
+      /*$(document).ready(function(){
+        $.ajax({
+           type: "POST",
+           processData: false,
+           url: '../fun/sabana.php',
+           cache: false,
+           data: $(this).serialize(),
+           success: function(dat)
+           {
+            //alert(dat);
+            var data = dat.split("%");
+            var datar = data[0].split("|");
+            for (var i = 1; i < datar.length; i++) {
+              //$("#matricula").append("<option value='" + datar[i] + "'>" + datar[i] + "</option>");  
+            }
+            $("#datos").append("<tr><td>Matricula</td><td>Alumno</td><td>Materia1</td><td>Materia2</td><td>Materia3</td><td>Materia4</td><td>Materia5</td><td>Materia6</td><td>Materia7</td><td>Materia8</td></tr>");  
+            datar = data[1].split("&");
+            for (var i = 1; i < datar.length; i++) {
+              var datarr = datar[i].split("|");
+              $("#datos").append("<tr><td>"+datarr[0]+"</td><td>"+datarr[1]+"</td><td>"+datarr[2]+"</td><td>"+datarr[3]+"</td><td>"+datarr[4]+"</td><td>"+datarr[5]+"</td><td>"+datarr[6]+"</td><td>"+datarr[7]+"</td><td>"+datarr[8]+"</td><td>"+datarr[9]+"</td></tr>"); 
+            }
+          }
+        });
+      });*/
+      function final(){
+        var urlp = 'pdf.html?dat_cvegrupo='+$("#cvegrupo").val()+"&periodoescolar="+$("#periodoescolar").val()+"&cvemodeloeducativo="+$("#cvemodeloeducativo").val()+"&cveunidadmin="+$("#cveunidadmin").val();
+        var myWindow = window.open(urlp, "Servicio", "width=700, height=500");
+      }
+      function oc_cveentidad(){
+        if ($("#cveentidad").val() !== "0") {
+          $("#cveunidadmin").empty(); $("#cveunidadmin").append("<option value='0'>Selecciona</option>");  
+          $.ajax({
+             type: "POST",
+             processData: false,
+             url: '../fun/fun.php?dat_cveentidad='+$("#cveentidad").val(),
+             cache: false,
+             data: $(this).serialize(),
+             success: function(data)
+             {
+              //alert(data);
+              var datar = data.split("&");
+              for (var i = 1; i < datar.length; i++) {
+                var datarr = datar[i].split("|");
+                $("#cveunidadmin").append("<option value='" + datarr[0] + "'>" + datarr[1] + "</option>");  
+              }
+             }
+          });
+        }else{
+          alert("Valor Invalido");
+        }
+      }
+      function oc_cvemodeloeducativo(){
+        //alert($("#cvemodeloeducativo").val());
+        if ($("#cvemodeloeducativo").val() !== "0") {
+          $("#periodoescolar").empty(); $("#periodoescolar").append("<option value='0'>Selecciona</option>");  
+          $("#cveplanestudio").empty(); $("#cveplanestudio").append("<option value='0'>Selecciona</option>");  
+          if ($("#cvemodeloeducativo").val() === "2018") {
+            $("#periodoescolar").append("<option value='11819'>11819</option>");
+          }else{
+            $("#periodoescolar").append("<option value='11213'>11213</option><option value='21213'>21213</option><option value='11314'>11314</option><option value='21314'>21314</option><option value='11415'>11415</option><option value='21415'>21415</option><option value='11516'>11516</option><option value='21516'>21516</option><option value='11617'>11617</option><option value='21617'>21617</option><option value='11718'>11718</option><option value='21718'>21718</option><option value='11819'>11819</option>");
+          };
+          $.ajax({
+             type: "POST",
+             processData: false,
+             url: '../fun/fun.php?dat_cvemodeloeducativo='+$("#cvemodeloeducativo").val()+"&cveunidadmin="+$("#cveunidadmin").val(),
+             cache: false,
+             data: $(this).serialize(),
+             success: function(data)
+             {
+              //alert(data);
+              var datar = data.split("&");
+              for (var i = 1; i < datar.length; i++) {
+                var datarr = datar[i].split("|");
+                $("#cveplanestudio").append("<option value='" + datarr[0] + "'>" + datarr[1] + "</option>");  
+              }
+             }
+          });
+        }else{
+          alert("Valor Invalido");
+        }
+      }
+      function oc_cveplanestudio(){
+        //alert($("#cvemodeloeducativo").val());
+        if ($("#cveplanestudio").val() !== "0") {
+          $("#cvegrupo").empty(); $("#cvegrupo").append("<option value='0'>Selecciona</option>");  
+          $.ajax({
+             type: "POST",
+             processData: false,
+             url: '../fun/fun.php?dat_cveplanestudio='+$("#cveplanestudio").val()+"&periodoescolar="+$("#periodoescolar").val()+"&cvemodeloeducativo="+$("#cvemodeloeducativo").val()+"&cveunidadmin="+$("#cveunidadmin").val(),
+             cache: false,
+             data: $(this).serialize(),
+             success: function(data)
+             {
+              //alert(data);
+              var datar = data.split("|");
+              for (var i = 1; i < datar.length; i++) {
+                $("#cvegrupo").append("<option value='" + datar[i] + "'>" + datar[i] + "</option>");  
+              }
+             }
+          });
+        }else{
+          alert("Valor Invalido");
+        }
+      }
+      function oc_cvegrupo(){
+        //alert($("#cvegrupo").val());
+        $("#encabezado").empty();
+        $("#datos").empty(); 
+        //$("#datos").append("<tr><td>Matricula</td><td>Alumno</td><td>Materia1</td><td>Materia2</td><td>Materia3</td><td>Materia4</td><td>Materia5</td><td>Materia6</td><td>Materia7</td><td>Materia8</td></tr>");  
+        if ($("#cvegrupo").val() !== "0") {
+          $.ajax({
+             type: "POST",
+             processData: false,
+             url: '../fun/sabana.php?dat_cvegrupo='+$("#cvegrupo").val()+"&periodoescolar="+$("#periodoescolar").val()+"&cvemodeloeducativo="+$("#cvemodeloeducativo").val()+"&cveunidadmin="+$("#cveunidadmin").val(),
+             cache: false,
+             data: $(this).serialize(),
+             success: function(dat)
+             {
+              //alert(dat);
+              var data = dat.split("%");
+              var datar = data[0].split("&");
+              $("#encabezado").append("<div class='row'><div class='col-md-10'><h3 class='box-title'>Datos del Grupo</h3><table id='tbl_cabeza' class='table table-hover' style=''></table></div><div class='col-md-2'><div class='row'><div class='inboxx' style='background-color: grey;'><label>Total Alumnos</label><br><b>46</b></div></div><div class='row'><div class='inboxx' style='background-color: green;'><label>Competentes</label><br><b>32</b></div></div><div class='row'><div class='inboxx' style='background-color: yellow;'><label>Intersemestral</label><br><b>10</b></div></div><div class='row'><div class='inboxx' style='background-color: red;'><label>Asesorías Compl.</label><br><b>4</b></div></div></div></div>");
+              $("#tbl_cabeza").append("<tr><th>Módulo</th><th>Nombre Módulo</th><th>Profesor</th><th>C</th><th style='background-color: yellow;'>I</th><th style='background-color: red;'>AC</th><th>%+Alto</th><th>PMPC</th></tr>");
+              $("#datos").append("<tr id='encabezado-tabla'></tr>");
+              $("#encabezado-tabla").append("<th>Matricula</th><th>Nombre</th>");
+              for (var i = 1; i < datar.length; i++) {
+                var datarr = datar[i].split("|");
+                $("#tbl_cabeza").append("<tr><td>"+datarr[0]+"</td><td>"+datarr[1]+"</td><td>"+datarr[3]+"</td><td>39</td><td>5</td><td>2</td><td>37%</td><td>23%</td></tr>");
+                $("#encabezado-tabla").append("<th>"+datarr[0]+"</th>");
+              }
+              $("#encabezado").append("<div class='row'><h3>Lista de Grupo</h3></div>");
+              datar = data[1].split("&");
+              for (var i = 1; i < datar.length; i++) {
+                var datarr = datar[i].split("|");
+                //$("#datos").append("<tr><td>"+datarr[0]+"</td><td>"+datarr[1]+"</td><td>"+datarr[2]+"</td><td>"+datarr[3]+"</td><td>"+datarr[4]+"</td><td>"+datarr[5]+"</td><td>"+datarr[6]+"</td><td>"+datarr[7]+"</td><td>"+datarr[8]+"</td><td>"+datarr[9]+"</td></tr>");
+                $("#datos").append("<tr id='"+datarr[0]+"'></tr>");
+
+                $("#"+datarr[0]).append("<td>"+datarr[0]+"</td>");
+                $("#"+datarr[0]).append("<td>"+datarr[1]+"</td>");
+                //**********************COLOCA COLORES MATERIA 1***********************              
+                if(parseFloat(datarr[2])<10){
+                  $("#"+datarr[0]).append("<td style='background-color: red;'>"+datarr[2]+"</td>");
+                } 
+                if(parseFloat(datarr[2])<15 && parseFloat(datarr[2])>=10){
+                  $("#"+datarr[0]).append("<td style='background-color: yellow;'>"+datarr[2]+"</td>");
+                }
+                if(parseFloat(datarr[2])>=15){
+                  $("#"+datarr[0]).append("<td>"+datarr[2]+"</td>");
+                }
+                if (datarr[2] === "n/c") {
+                  $("#"+datarr[0]).append("<td>"+datarr[2]+"</td>");
+                }
+                //**********************COLOCA COLORES MATERIA 2***********************
+                if(parseFloat(datarr[3])<10){
+                  $("#"+datarr[0]).append("<td style='background-color: red;'>"+datarr[3]+"</td>");
+                } 
+                if(parseFloat(datarr[3])<15 && parseFloat(datarr[3])>=10){
+                  $("#"+datarr[0]).append("<td style='background-color: yellow;'>"+datarr[3]+"</td>");
+                }
+                if(parseFloat(datarr[3])>=15){
+                  $("#"+datarr[0]).append("<td>"+datarr[3]+"</td>");
+                }
+                if (datarr[3] === "n/c") {
+                  $("#"+datarr[0]).append("<td>"+datarr[3]+"</td>");
+                }
+                //**********************COLOCA COLORES MATERIA 3***********************
+                if(parseFloat(datarr[4])<10){
+                  $("#"+datarr[0]).append("<td style='background-color: red;'>"+datarr[4]+"</td>");
+                } 
+                if(parseFloat(datarr[4])<15 && parseFloat(datarr[4])>=10){
+                  $("#"+datarr[0]).append("<td style='background-color: yellow;'>"+datarr[4]+"</td>");
+                }
+                if(parseFloat(datarr[4])>=15){
+                  $("#"+datarr[0]).append("<td>"+datarr[4]+"</td>");
+                }
+                if (datarr[4] === "n/c") {
+                  $("#"+datarr[0]).append("<td>"+datarr[4]+"</td>");
+                }
+                //**********************COLOCA COLORES MATERIA 4***********************
+                if(parseFloat(datarr[5])<10){
+                  $("#"+datarr[0]).append("<td style='background-color: red;'>"+datarr[5]+"</td>");
+                } 
+                if(parseFloat(datarr[5])<15 && parseFloat(datarr[5])>=10){
+                  $("#"+datarr[0]).append("<td style='background-color: yellow;'>"+datarr[5]+"</td>");
+                }
+                if(parseFloat(datarr[5])>=15){
+                  $("#"+datarr[0]).append("<td>"+datarr[5]+"</td>");
+                }
+                if (datarr[5] === "n/c") {
+                  $("#"+datarr[0]).append("<td>"+datarr[5]+"</td>");
+                }
+                //**********************COLOCA COLORES MATERIA 5***********************
+                if(parseFloat(datarr[6])<10){
+                  $("#"+datarr[0]).append("<td style='background-color: red;'>"+datarr[6]+"</td>");
+                } 
+                if(parseFloat(datarr[6])<15 && parseFloat(datarr[6])>=10){
+                  $("#"+datarr[0]).append("<td style='background-color: yellow;'>"+datarr[6]+"</td>");
+                }
+                if(parseFloat(datarr[6])>=15){
+                  $("#"+datarr[0]).append("<td>"+datarr[6]+"</td>");
+                }
+                if (datarr[6] === "n/c") {
+                  $("#"+datarr[0]).append("<td>"+datarr[6]+"</td>");
+                }
+                //**********************COLOCA COLORES MATERIA 6***********************
+                if(parseFloat(datarr[7])<10){
+                  $("#"+datarr[0]).append("<td style='background-color: red;'>"+datarr[7]+"</td>");
+                } 
+                if(parseFloat(datarr[7])<15 && parseFloat(datarr[7])>=10){
+                  $("#"+datarr[0]).append("<td style='background-color: yellow;'>"+datarr[7]+"</td>");
+                }
+                if(parseFloat(datarr[7])>=15){
+                  $("#"+datarr[0]).append("<td>"+datarr[7]+"</td>");
+                }
+                if (datarr[7] === "n/c") {
+                  $("#"+datarr[0]).append("<td>"+datarr[7]+"</td>");
+                }
+                //**********************COLOCA COLORES MATERIA 7***********************
+                if(parseFloat(datarr[8])<10){
+                  $("#"+datarr[0]).append("<td style='background-color: red;'>"+datarr[8]+"</td>");
+                } 
+                if(parseFloat(datarr[8])<15 && parseFloat(datarr[8])>=10){
+                  $("#"+datarr[0]).append("<td style='background-color: yellow;'>"+datarr[8]+"</td>");
+                }
+                if(parseFloat(datarr[8])>=15){
+                  $("#"+datarr[0]).append("<td>"+datarr[8]+"</td>");
+                }
+                if (datarr[8] === "n/c") {
+                  $("#"+datarr[0]).append("<td>"+datarr[8]+"</td>");
+                }
+                //**********************COLOCA COLORES MATERIA 8***********************
+                if(parseFloat(datarr[9])<10){
+                  $("#"+datarr[0]).append("<td style='background-color: red;'>"+datarr[9]+"</td>");
+                } 
+                if(parseFloat(datarr[9])<15 && parseFloat(datarr[9])>=10){
+                  $("#"+datarr[0]).append("<td style='background-color: yellow;'>"+datarr[9]+"</td>");
+                }
+                if(parseFloat(datarr[9])>=15){
+                  $("#"+datarr[0]).append("<td>"+datarr[9]+"</td>");
+                }
+                if (datarr[9] === "n/c") {
+                  $("#"+datarr[0]).append("<td>"+datarr[9]+"</td>");
+                }
+              }
+             }
+          });
+        }else{
+          alert("Valor Invalido");
+        }
+      };
+    </script>
+    <style type="text/css">
+      .txt-barra{
+        color: white;
+        font-size: 1.3em;
+      }
+    </style>
+  </head>
+  <body class="skin-blue">
+    <div class="wrapper">
+      <!-- Main Header -->
+      <div style="position: absolute; color: white; z-index: 2000; width: 230px; text-align: center;"><h3>Potenciometro</h3></div>
+      <!-- Left side column. contains the logo and sidebar -->
+      <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+          <!-- Sidebar user panel (optional) -->
+          <br>
+          <div class="user-panel">
+            <div class="pull-left image">
+              <img src="../dist/img/usertotal.png" class="img-circle" alt="User Image" />
+            </div>
+            <div class="pull-left info">
+              <p>Usuario</p>
+              <!-- Status -->
+              <a href="#"><i class="fa fa-circle text-success"></i> Usuario General</a>
+            </div>
+          </div>
+          <!-- /.search form -->
+
+          <!-- Sidebar Menu -->
+          <ul class="sidebar-menu">
+            <li class="header">FILTROS</li>
+            <!-- Optionally, you can add icons to the links -->
+            <li class="txt-barra">Entidad</li>
+            <li class="active">
+              <select id="cveentidad" class="form-control" onchange="oc_cveentidad()">
+                <option value='0'>Selecciona</option>
+                <option value="1">Aguascalientes</option>
+                <option value="2">Baja California</option>
+                <option value="3">Baja California Sur</option>
+                <option value="4">Campeche</option>
+                <option value="5">Coahuila de Zaragoza</option>
+                <option value="6">Colima</option>
+                <option value="7">Chiapas</option>
+                <option value="8">Chihuahua</option>
+                <option value="9">Ciudad de México</option>
+                <option value="10">Durango</option>
+                <option value="11">Guanajuato</option>
+                <option value="12">Guerrero</option>
+                <option value="13">Hidalgo</option>
+                <option value="14">Jalisco</option>
+                <option value="15">México</option>
+                <option value="16">Michoacán de Ocampo</option>
+                <option value="17">Morelos</option>
+                <option value="18">Nayarit</option>
+                <option value="19">Nuevo León</option>
+                <option value="20">Oaxaca</option>
+                <option value="21">Puebla</option>
+                <option value="22">Querétaro de Arteaga</option>
+                <option value="23">Quintana Roo</option>
+                <option value="24">San Luis Potosí</option>
+                <option value="25">Sinaloa</option>
+                <option value="26">Sonora</option>
+                <option value="27">Tabasco</option>
+                <option value="28">Tamaulipas</option>
+                <option value="29">Tlaxcala</option>
+                <option value="30">Veracruz Llave</option>
+                <option value="31">Yucatán</option>
+                <option value="32">Zacatecas</option>
+              </select>
+            </li>
+            <li class="txt-barra">Plantel</li>
+            <li>
+              <select id="cveunidadmin" class="form-control">
+                <option value='0'>Selecciona</option>
+              </select>
+            </li>
+            <li class="txt-barra">Modelo Educativo</li>
+            <li>
+              <select id="cvemodeloeducativo" class="form-control" onchange="oc_cvemodeloeducativo()">
+                <option value='0'>Selecciona</option>
+                <option value="2003">2003</option>
+                <option value="2008">2008</option>
+                <option value="2018">2018</option>
+              </select>
+            </li>
+            <li class="txt-barra">Periodo Escolar</li>
+            <li>
+              <select id="periodoescolar" class="form-control">
+                <option value='0'>Selecciona</option>
+              </select>
+            </li>
+            <li class="txt-barra">Carrera</li>
+            <li>
+              <select id="cveplanestudio" class="form-control" onchange="oc_cveplanestudio()">
+                <option value='0'>Selecciona</option>
+              </select>
+            </li>
+            <li class="txt-barra">Grupo</li>
+            <li>
+              <select id="cvegrupo" class="form-control" onchange="oc_cvegrupo()">
+                <option value='0'>Selecciona</option>
+              </select>
+            </li>
+            <li><button onclick="final();">GeneraPDF</button></li>
+          </ul><!-- /.sidebar-menu -->
+        </section>
+        <!-- /.sidebar -->
+      </aside>
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            Sabana de calificaciones
+            <small>Resultados de Búsqueda</small>
+          </h1>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">          
+          <!-- Your Page Content Here -->
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="box">
+                <div class="box-header">
+                  <div id="encabezado">
+                    <!--<div class='recu' style='background-color: red;'></div>
+                    <div class='recu' style='background-color: yellow; top: 700%'></div>-->
+                  </div>
+                </div><!-- /.box-header -->
+                <div class="box-body table-responsive no-padding">
+                  <row>
+                    <table id="datos" class="table table-hover">
+                      <!--<tr><td>Matricula</td><td>Alumno</td><td>Materia1</td><td>Materia2</td><td>Materia3</td><td>Materia4</td><td>Materia5</td><td>Materia6</td><td>Materia7</td><td>Materia8</td></tr>
+                      <tr><td>Matricula</td><td>Alumno</td><td>Materia1</td><td>Materia2</td><td>Materia3</td><td>Materia4</td><td>Materia5</td><td>Materia6</td><td>Materia7</td><td>Materia8</td></tr>
+                      <tr><td>Matricula</td><td>Alumno</td><td>Materia1</td><td>Materia2</td><td>Materia3</td><td>Materia4</td><td>Materia5</td><td>Materia6</td><td>Materia7</td><td>Materia8</td></tr>
+                      <tr><td>Matricula</td><td>Alumno</td><td>Materia1</td><td>Materia2</td><td>Materia3</td><td>Materia4</td><td>Materia5</td><td>Materia6</td><td>Materia7</td><td>Materia8</td></tr>
+                      <tr><td>Matricula</td><td>Alumno</td><td>Materia1</td><td>Materia2</td><td>Materia3</td><td>Materia4</td><td>Materia5</td><td>Materia6</td><td>Materia7</td><td>Materia8</td></tr>-->
+                    </table>
+                  </row>
+                </div><!-- /.box-body -->
+              </div><!-- /.box -->
+            </div>
+          </div>
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+
+      <!-- Main Footer -->
+
+    </div><!-- ./wrapper -->
+
+    <!-- REQUIRED JS SCRIPTS -->
+    
+    <!-- jQuery 2.1.3 -->
+    <script src="../plugins/jQuery/jQuery-2.1.3.min.js"></script>
+    <!-- FastClick -->
+    <script src='../plugins/fastclick/fastclick.min.js'></script>
+    <!-- AdminLTE App -->
+    <script src="../dist/js/app.min.js" type="text/javascript"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="../dist/js/demo.js" type="text/javascript"></script>
+  </body>
+</html>

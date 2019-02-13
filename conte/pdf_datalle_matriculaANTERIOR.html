@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Reportes</title>
+    <!--<link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.css" />-->
+    <style type="text/css">
+      table{
+        margin-left: 15px;
+        margin-top: 65px;
+        font-size: .8em;
+        border-collapse: collapse;
+      }
+      table, th, td {
+        border: 1px solid black;
+      }
+      td{
+        min-width: 25px;
+      }
+      .pfddata{
+        font-size: .8em;
+        margin-left: 530px;
+      }
+      .conalep{
+        position: absolute;
+        font-size: 2.5em;
+        font-family: sans-serif;
+        font-weight: bold;
+        text-shadow: 2px 2px #aaa;
+        color: #006b54;
+        width: 220px;
+        height: 80px;
+        top: 20px;
+        left: 25px;
+      }
+      .conalep > span{
+        font-size: .2em;
+        text-shadow: 1px 1px #aaa;
+        position: absolute;
+        top: 45px;
+        left: 6px;
+      }
+      .contine{
+        position: absolute;
+        top: 87px;
+        left: 25px;
+        //background-color: orange;
+        width: 750px;
+        height: 50px;
+        opacity: .8;
+      }
+      .inboxx{
+        float: left;
+        background-color: #dd4b39;
+        width: 20%;
+        text-align: center;
+        height: 45px;
+        border-radius: 5px;
+        margin: 2%;
+      }
+      .inboxx > b{
+        font-size: 1.5em;
+      }
+      .inboxx > label{
+        font-size: .8em;
+      }
+    </style>
+    <script src="../js/jquery-3.3.1.js"></script>
+    
+    <script type="text/javascript">
+        var getUrlParameter = function getUrlParameter(sParam) {
+            var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : sParameterName[1];
+                }
+            }
+        }; 
+    //alert(getUrlParameter("matricula"));
+  /*
+    $(document).ready(function(){
+        $.ajax({
+           type: "POST",
+           processData: false,
+           //url: '../fun/sabana.php?dat_cvegrupo='+getUrlParameter("dat_cvegrupo")+"&periodoescolar="+getUrlParameter("periodoescolar")+"&cvemodeloeducativo="+getUrlParameter("cvemodeloeducativo")+"&cveunidadmin="+getUrlParameter("cveunidadmin"),
+           //url: '../fun/detalle_matricula.php';
+           cache: false,
+           data: $(this).serialize(),
+           success: function(dat)
+           {
+            //alert(dat);
+            var data = dat.split("%");
+
+           }
+        });
+    });
+  */
+    function fech(){
+      var mo = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+      var da = new Date();
+      var di = da.getDate();
+      var me = mo[da.getMonth()];
+      var an = da.getYear();
+      var ann = an.toString();
+      var annn = ann.substring(1);
+      return(di + "/" + me + "/" + annn);
+    };
+
+    function pruebas(){
+        var data = "0&AMAE04|Análisis de la materia y la energía|1|1|1|10.00|1|45.00|E&AMAE04|Análisis de la materia y la energía|1|1|1|10.00|2|40.00|E&AMAE04|Análisis de la materia y la energía|1|1|1|10.00|3|15.00|E&AMAE04|Análisis de la materia y la energía|1|2|1|15.00|1|40.00|E&AMAE04|Análisis de la materia y la energía|1|2|1|15.00|2|30.00|E&AMAE04|Análisis de la materia y la energía|1|2|1|15.00|3|25.00|E&AMAE04|Análisis de la materia y la energía|1|2|1|15.00|4|5.00|E&AMAE04|Análisis de la materia y la energía|2|1|1|10.00|1|45.00|E&AMAE04|Análisis de la materia y la energía|2|1|1|10.00|2|40.00|E&AMAE04|Análisis de la materia y la energía|2|1|1|10.00|3|5.00|E&AMAE04|Análisis de la materia y la energía|2|1|1|10.00|4|10.00|E&AMAE04|Análisis de la materia y la energía|2|2|1|10.00|1|40.00|E&AMAE04|Análisis de la materia y la energía|2|2|1|10.00|2|30.00|E&AMAE04|Análisis de la materia y la energía|2|2|1|10.00|3|25.00|E&AMAE04|Análisis de la materia y la energía|2|2|1|10.00|4|5.00|E&APRE04|Autogestión del aprendizaje|1|1|1|30.00|1|10.00|E&APRE04|Autogestión del aprendizaje|1|1|1|30.00|2|10.00|E&APRE04|Autogestión del aprendizaje|1|1|1|30.00|3|30.00|E&APRE04|Autogestión del aprendizaje|1|1|1|30.00|4|30.00|E&APRE04|Autogestión del aprendizaje|1|1|1|30.00|5|20.00|E&COIN04|Comunicación para la interacción social|1|1|1|10.00|1|10.00|E&COIN04|Comunicación para la interacción social|1|1|1|10.00|2|5.00|E&COIN04|Comunicación para la interacción social|1|1|1|10.00|3|10.00|E&COIN04|Comunicación para la interacción social|1|1|1|10.00|4|15.00|E&COIN04|Comunicación para la interacción social|1|1|1|10.00|5|20.00|E&COIN04|Comunicación para la interacción social|1|1|1|10.00|6|30.00|E&COIN04|Comunicación para la interacción social|1|1|1|10.00|7|10.00|E&COIN04|Comunicación para la interacción social|1|2|1|5.00|1|30.00|E&COIN04|Comunicación para la interacción social|1|2|1|5.00|2|30.00|E&COIN04|Comunicación para la interacción social|1|2|1|5.00|3|20.00|E&COIN04|Comunicación para la interacción social|1|2|1|5.00|4|20.00|E&COIN04|Comunicación para la interacción social|2|1|1|15.00|1|40.00|E&COIN04|Comunicación para la interacción social|2|1|1|15.00|2|40.00|E&COIN04|Comunicación para la interacción social|2|1|1|15.00|3|10.00|E&COIN04|Comunicación para la interacción social|2|1|1|15.00|4|10.00|E&COIN04|Comunicación para la interacción social|2|2|1|25.00|1|30.00|E&COIN04|Comunicación para la interacción social|2|2|1|25.00|2|20.00|E&COIN04|Comunicación para la interacción social|2|2|1|25.00|3|40.00|E&COIN04|Comunicación para la interacción social|2|2|1|25.00|4|10.00|E&ININ03|Interacción inicial en inglés|1|2|1|30.00|1|30.00|E&ININ03|Interacción inicial en inglés|1|2|1|30.00|2|30.00|E&ININ03|Interacción inicial en inglés|1|2|1|30.00|3|30.00|E&ININ03|Interacción inicial en inglés|1|2|1|30.00|4|10.00|E&ININ03|Interacción inicial en inglés|2|2|1|30.00|1|30.00|E&ININ03|Interacción inicial en inglés|2|2|1|30.00|2|30.00|E&ININ03|Interacción inicial en inglés|2|2|1|30.00|3|30.00|E&ININ03|Interacción inicial en inglés|2|2|1|30.00|4|10.00|E&MAEC05|Manejo de espacios y cantidades|1|1|1|10.00|1|30.00|E&MAEC05|Manejo de espacios y cantidades|1|1|1|10.00|2|50.00|E&MAEC05|Manejo de espacios y cantidades|1|1|1|10.00|3|20.00|E&MAEC05|Manejo de espacios y cantidades|1|2|1|10.00|1|30.00|E&MAEC05|Manejo de espacios y cantidades|1|2|1|10.00|2|50.00|E&MAEC05|Manejo de espacios y cantidades|1|2|1|10.00|3|20.00|E&MAEC05|Manejo de espacios y cantidades|2|1|1|10.00|1|25.00|E&MAEC05|Manejo de espacios y cantidades|2|1|1|10.00|2|50.00|E&MAEC05|Manejo de espacios y cantidades|2|1|1|10.00|3|25.00|E&MAEC05|Manejo de espacios y cantidades|2|2|1|15.00|1|50.00|E&MAEC05|Manejo de espacios y cantidades|2|2|1|15.00|2|50.00|E&PIPM04|Procesamiento de información por medios digitales|1|1|1|5.00|1|55.00|E&PIPM04|Procesamiento de información por medios digitales|1|1|1|5.00|2|15.00|E&PIPM04|Procesamiento de información por medios digitales|1|1|1|5.00|3|20.00|E&PIPM04|Procesamiento de información por medios digitales|1|1|1|5.00|4|10.00|E&PIPM04|Procesamiento de información por medios digitales|1|2|1|10.00|1|40.00|E&PIPM04|Procesamiento de información por medios digitales|1|2|1|10.00|2|30.00|E&PIPM04|Procesamiento de información por medios digitales|1|2|1|10.00|3|20.00|E&PIPM04|Procesamiento de información por medios digitales|1|2|1|10.00|4|10.00|E&PIPM04|Procesamiento de información por medios digitales|2|1|1|10.00|1|30.00|E&PIPM04|Procesamiento de información por medios digitales|2|1|1|10.00|2|25.00|E&PIPM04|Procesamiento de información por medios digitales|2|1|1|10.00|3|20.00|E&PIPM04|Procesamiento de información por medios digitales|2|1|1|10.00|4|15.00|E&PIPM04|Procesamiento de información por medios digitales|2|1|1|10.00|5|10.00|E&PIPM04|Procesamiento de información por medios digitales|2|2|1|20.00|1|30.00|E&PIPM04|Procesamiento de información por medios digitales|2|2|1|20.00|2|50.00|E&PIPM04|Procesamiento de información por medios digitales|2|2|1|20.00|3|10.00|E&PIPM04|Procesamiento de información por medios digitales|2|2|1|20.00|4|10.00|E&PROP05|Proyección personal y profesional|1|1|1|10.00|1|60.00|E&PROP05|Proyección personal y profesional|1|1|1|10.00|2|20.00|S&PROP05|Proyección personal y profesional|1|1|1|10.00|3|15.00|E&PROP05|Proyección personal y profesional|1|1|1|10.00|4|2.00|E&PROP05|Proyección personal y profesional|1|1|1|10.00|5|3.00|E&PROP05|Proyección personal y profesional|1|2|1|10.00|1|20.00|E&PROP05|Proyección personal y profesional|1|2|1|10.00|2|45.00|E&PROP05|Proyección personal y profesional|1|2|1|10.00|3|15.00|S&PROP05|Proyección personal y profesional|1|2|1|10.00|4|10.00|E&PROP05|Proyección personal y profesional|1|2|1|10.00|5|10.00|E&PROP05|Proyección personal y profesional|2|1|1|10.00|1|50.00|E&PROP05|Proyección personal y profesional|2|1|1|10.00|2|20.00|S&PROP05|Proyección personal y profesional|2|1|1|10.00|3|20.00|S&PROP05|Proyección personal y profesional|2|1|1|10.00|4|5.00|S&PROP05|Proyección personal y profesional|2|1|1|10.00|5|5.00|E&PROP05|Proyección personal y profesional|2|2|1|10.00|1|50.00|E&PROP05|Proyección personal y profesional|2|2|1|10.00|2|25.00|S&PROP05|Proyección personal y profesional|2|2|1|10.00|3|15.00|S&PROP05|Proyección personal y profesional|2|2|1|10.00|4|5.00|S&PROP05|Proyección personal y profesional|2|2|1|10.00|5|5.00|E&REDE04|Resolución de problemas|1|1|1|10.00|1|40.00|E&REDE04|Resolución de problemas|1|1|1|10.00|2|40.00|E&REDE04|Resolución de problemas|1|1|1|10.00|3|15.00|S&REDE04|Resolución de problemas|1|2|1|15.00|1|40.00|E&REDE04|Resolución de problemas|1|2|1|15.00|2|40.00|E&REDE04|Resolución de problemas|1|2|1|15.00|3|15.00|S&REDE04|Resolución de problemas|2|1|1|10.00|1|30.00|E&REDE04|Resolución de problemas|2|1|1|10.00|2|30.00|E&REDE04|Resolución de problemas|2|1|1|10.00|3|20.00|E&REDE04|Resolución de problemas|2|2|1|15.00|1|25.00|E&REDE04|Resolución de problemas|2|2|1|15.00|2|25.00|E&REDE04|Resolución de problemas|2|2|1|15.00|3|25.00|E&REDE04|Resolución de problemas|2|2|1|15.00|5|5.00|E";
+        var datar = data.split("&");
+        
+        var cvemodulo = [];
+        var desmodulo = [];
+        var cveUE = [];
+        var cveRA = [];
+        var cveAE = [];
+        var actividadEvaluacion = [];
+        var cveIndicador = [];
+        var indicador = [];
+        var calificacionindicador = [];
+        var nom_m = ["n", "n", "n", "n", "n", "n", "n", "n"]; 
+        for (var i = 1; i < datar.length; i++) {
+          var datarr = datar[i].split("|");
+            cvemodulo.push(datarr[0]);
+            desmodulo.push(datarr[1]);
+            cveUE.push(datarr[2]);
+            cveRA.push(datarr[3]);
+            cveAE.push(datarr[4]);
+            actividadEvaluacion.push(datarr[5]);
+            cveIndicador.push(datarr[6]);
+            indicador.push(datarr[7]);
+            calificacionindicador.push(datarr[8]);
+        }
+        //alert(nom_m);
+
+        var ran_m_1 = ["n", "n"]; 
+        var ran_m_2 = ["n", "n"]; 
+        var ran_m_3 = ["n", "n"]; 
+        var ran_m_4 = ["n", "n"]; 
+        var ran_m_5 = ["n", "n"]; 
+        var ran_m_6 = ["n", "n"]; 
+        var ran_m_7 = ["n", "n"]; 
+        var ran_m_8 = ["n", "n"]; 
+        for (var i = 0; i < cvemodulo.length; i++) {
+          if (nom_m[0] === "n") {
+            nom_m[0] = cvemodulo[i];
+          }
+          if (nom_m[0] === cvemodulo[i]) {
+            ran_m_1[1] = i;
+            if (ran_m_1[0] === "n") {
+              ran_m_1[0] = i;
+            }
+          }else{
+            if (nom_m[1] === "n") {
+              nom_m[1] = cvemodulo[i+1];
+            }
+            if (nom_m[1] === cvemodulo[i]) {
+              ran_m_2[1] = i;
+              if (ran_m_2[0] === "n") {
+                ran_m_2[0] = i;
+              }
+            }else{
+              if (nom_m[2] === "n") {
+                nom_m[2] = cvemodulo[i+1];
+              }
+              if (nom_m[2] === cvemodulo[i]) {
+                ran_m_3[1] = i;
+                if (ran_m_3[0] === "n") {
+                  ran_m_3[0] = i;
+                }
+              }else{
+                if (nom_m[3] === "n") {
+                  nom_m[3] = cvemodulo[i+1];
+                }
+                if (nom_m[3] === cvemodulo[i]) {
+                  ran_m_4[1] = i;
+                  if (ran_m_4[0] === "n") {
+                    ran_m_4[0] = i;
+                  }
+                }else{
+                  if (nom_m[4] === "n") {
+                    nom_m[4] = cvemodulo[i+1];
+                  }
+                  if (nom_m[4] === cvemodulo[i]) {
+                    ran_m_5[1] = i;
+                    if (ran_m_5[0] === "n") {
+                      ran_m_5[0] = i;
+                    }
+                  }else{
+                    if (nom_m[5] === "n") {
+                      nom_m[5] = cvemodulo[i+1];
+                    }
+                    if (nom_m[5] === cvemodulo[i]) {
+                      ran_m_6[1] = i;
+                      if (ran_m_6[0] === "n") {
+                        ran_m_6[0] = i;
+                      }
+                    }else{
+                      if (nom_m[6] === "n") {
+                        nom_m[6] = cvemodulo[i+1];
+                      }
+                      if (nom_m[6] === cvemodulo[i]) {
+                        ran_m_7[1] = i;
+                        if (ran_m_7[0] === "n") {
+                          ran_m_7[0] = i;
+                        }
+                      }else{
+                        if (nom_m[7] === "n") {
+                          nom_m[7] = cvemodulo[i+1];
+                        }
+                        if (nom_m[7] === cvemodulo[i]) {
+                          ran_m_8[1] = i;
+                          if (ran_m_8[0] === "n") {
+                            ran_m_8[0] = i;
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        //alert(ran_m_1+"\n"+nom_m);
+
+        $("#datos").append("<tr id='m1_calificacionindicador'></tr>");
+        $("#datos").append("<tr id='m1_indicador'></tr>");
+        $("#datos").append("<tr id='m1_cveIndicador'></tr>");
+        $("#datos").append("<tr id='m1_actividadEvaluacion'></tr>");
+        $("#datos").append("<tr id='m1_cveAE'></tr>");
+        $("#datos").append("<tr id='m1_cveRA'></tr>");
+        $("#datos").append("<tr id='m1_cveUE'></tr>");
+        $("#datos").append("<tr id='m1_desmodulo'></tr>");
+        for (var i = 0; i < cvemodulo.length; i++) {
+          if (i >= ran_m_1[0] && i <= ran_m_1[1]) {
+            $("#m1_calificacionindicador").append("<td>"+indicador[i]+"</td>");
+            $("#m1_indicador").append("<td>"+calificacionindicador[i]+"</td>");
+            $("#m1_cveIndicador").append("<td>"+cveIndicador[i]+"</td>");
+            $("#m1_actividadEvaluacion").append("<td>"+actividadEvaluacion[i]+"</td>");
+            $("#m1_cveAE").append("<td>"+cveAE[i]+"</td>");
+            $("#m1_cveRA").append("<td>"+cveRA[i]+"</td>");
+            $("#m1_cveUE").append("<td>"+cveUE[i]+"</td>");
+            $("#m1_desmodulo").append("<td>"+desmodulo[i]+"</td>");
+          }
+        }
+
+
+
+        for (var i = 1; i < datar.length; i++) {
+          var datarr = datar[i].split("|");
+          var nomb_modulo = datarr[1].replace(/ /g, "_");
+          
+          $("#datos").append("");
+        }
+    }
+
+  </script>
+
+  </head>
+  <body>
+    <button onclick="pruebas()">pruebas</button>
+    
+    <!--<img src="../ima/conalep.png">-->
+    <div id="encabezado">
+      
+    </div>
+    <table id="datos" class="table"></table>
+    <!--<button onclick="canv()">GENERAR</button>-->
+    <script src='../jsPDF-1.3.2/dist/jspdf.debug.js'></script>
+    <script src='../jsPDF-1.3.2/libs/html2pdf.js'></script>
+    <script>
+      function canv(){
+        var pdf = new jsPDF('l', 'pt', 'letter');
+        var canvas = pdf.canvas;
+        //canvas.width = 8.5 * 72;
+        $("#borraconalep").empty();
+
+        html2canvas(document.body, {
+            canvas:canvas,
+            onrendered: function(canvas) {
+                //var iframe = document.createElement('iframe');
+                //iframe.setAttribute('style','position:absolute;right:0; top:0; bottom:0; height:100%; width:500px');
+                //document.body.appendChild(iframe);
+                //iframe.src = pdf.output('datauristring');
+                
+                pdf.setFont("helvetica");
+                pdf.setTextColor(0, 107, 84);
+                pdf.setFontType("italic");
+                pdf.setFontType("bold");
+                pdf.setFontSize(28);
+                pdf.text(40, 57, 'Conalep');
+
+                pdf.setFontSize(8);
+                pdf.text(40, 70, 'Conlegio Nacional de Educación Profecional Técnica');
+                
+                pdf.setFontSize(15);
+                pdf.text(270, 90, 'Datos Indicadores Grupo-Módulo');
+
+                var nom_archivo = "Potenciometro_"+getUrlParameter("dat_cvegrupo")+".pdf";
+                pdf.save(nom_archivo);
+                $("#encabezado").append("<div class='conalep' id='borraconalep'>Conalep<span>Conlegio Nacional de Educación Profecional Técnica</span></div>");
+            }
+        });
+      }
+      var bandera = true;
+      //var rel = setInterval(relog, 3000);
+      function relog() {
+          if (bandera) {
+            bandera = false;
+            canv();
+          }
+      }
+    </script>
+  </body>
+</html>

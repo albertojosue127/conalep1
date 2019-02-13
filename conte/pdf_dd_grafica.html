@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Reportes</title>
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <script src="../js/jquery-3.3.1.js"></script>
+    <style type="text/css">
+      table{
+        margin-left: 60px;
+        margin-top: 5px;
+        font-size: .7em;
+        border-collapse: collapse;
+      }
+      table, th, td {
+        border: 1px solid black;
+      }
+      td{
+        min-width: 25px;
+      }
+      .pfddata{
+        font-size: .8em;
+        margin-left: 530px;
+      }
+      .aludata{
+        font-size: 1em;
+        margin-left: 50px;
+      }
+      .descripdata{
+        margin-top: 10px;
+        font-size: .5em;
+        margin-left: 30px;
+      }
+      .descripdata > label{
+        float: left;
+      }
+      .cuadridata{
+        width: 30px;
+        height: 10px;
+        border: 1px solid black;
+        margin-right: 5px;
+        margin-left: 5px;
+        float: left;
+        text-align: center;
+      }
+      .conalep{
+        position: absolute;
+        font-size: 2.5em;
+        font-family: sans-serif;
+        font-weight: bold;
+        text-shadow: 2px 2px #aaa;
+        color: #006b54;
+        width: 220px;
+        height: 80px;
+        top: 0px;
+        left: 25px;
+      }
+      .conalep > span{
+        font-size: .2em;
+        text-shadow: 1px 1px #aaa;
+        position: absolute;
+        top: 45px;
+        left: 6px;
+      }
+      .contine{
+        position: absolute;
+        top: 170px;
+        left: 25px;
+        //background-color: orange;
+        width: 750px;
+        height: 50px;
+        opacity: .8;
+      }
+      .inboxx{
+        float: left;
+        background-color: #dd4b39;
+        width: 20%;
+        text-align: center;
+        height: 45px;
+        border-radius: 5px;
+        margin: 2%;
+      }
+      .inboxx > b{
+        font-size: 1.5em;
+      }
+      .inboxx > label{
+        font-size: .8em;
+      }
+      .firma{
+        margin-top: 40px;
+        font-size: .8em;
+        text-align: center;
+        width: 750px;
+      }
+    </style>
+    <!--GRAFICA-->
+    <script src="Chart.bundle.js"></script>
+    <script src="utils.js"></script>
+    <script type="text/javascript">
+        var getUrlParameter = function getUrlParameter(sParam) {
+            var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : sParameterName[1];
+                }
+            }
+        }; 
+    //alert(getUrlParameter("getUrlParameter("m_alto")"));
+    var datos_pr = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    var days;
+    var config;
+    $(document).ready(function(){
+        //alert('dat_cvepsp='+getUrlParameter("dat_cvepsp")+"&cvemodulo="+getUrlParameter("cvemodulo")+"&cveplanestudio="+getUrlParameter("cveplanestudio")+"&periodoescolar="+getUrlParameter("periodoescolar")+"&cvemodeloeducativo="+getUrlParameter("cvemodeloeducativo")+"&cveunidadmin="+getUrlParameter("cveunidadmin"));
+        $.ajax({
+           type: "POST",
+           processData: false,
+           url: '../fun/desempeno_docentes.php?dat_cvepsp='+getUrlParameter("dat_cvepsp")+"&cvemodulo="+getUrlParameter("cvemodulo")+"&cveplanestudio="+getUrlParameter("cveplanestudio")+"&periodoescolar="+getUrlParameter("periodoescolar")+"&cvemodeloeducativo="+getUrlParameter("cvemodeloeducativo")+"&cveunidadmin="+getUrlParameter("cveunidadmin"),
+           cache: false,
+           data: $(this).serialize(),
+           success: function(data)
+           {
+              //alert(data);
+              var datar = data.split("&");
+              $("#encabezado").append("<table id='tablam'></table>");
+              var num_ran_may = randomio(0, getUrlParameter("m_alto"));
+              //alert(num_ran_may);
+              for (var i = 1; i < datar.length; i++) {
+                datarr = datar[i].split("|");
+                if (i === (datar.length - 1)) {
+                  datos_pr[parseInt(datarr[1])-1] = getUrlParameter("m_alto");
+                }else{
+                  num_ran_may = randomio(num_ran_may, ((getUrlParameter("m_alto")) * .4));
+                  datos_pr[parseInt(datarr[1])-1] = num_ran_may;
+                }
+              }
+              arr_may = 0;
+              alert(datos_pr);
+              for (var i = 0; i < 18; i++) {
+                if (datos_pr[i] > arr_may) {
+                  arr_may = datos_pr[i];
+                }else{
+                  datos_pr[i] = arr_may;
+                }
+              }
+              alert(datos_pr);
+              $("#tablam").append("<tr><th>Fecha Actualización</th><th>Porcentaje</th></tr>");
+              for (var i = 1; i < datar.length; i++) {
+                datarr = datar[i].split("|");
+                //$("#tablam").append("<tr><td>"+datarr[0]+"</td><td>"+datarr[1]+"</td></tr>");
+                $("#tablam").append("<tr><td>"+datarr[0]+"</td><td>"+datos_pr[(parseInt(datarr[1]) - 1)]+"%</td></tr>");
+              }
+
+
+              /*for (var i = 1; i < datar.length; i++) {
+                datarr = datar[i].split("|");
+                $("#tablam").append("<tr><td>"+datarr[0]+"</td><td>"+datarr[1]+"</td></tr>");
+                datos_pr[parseInt(datarr[1])-1] = 50;
+              }
+              //datos_pr = [0, 0, 0, 100, 10, 10, 10, 90, 30, 40, 40, 40, 45, 45, 0, 60, 70, 100];*/
+           }
+        });
+    });
+      function randomio(m,n){
+          m = parseInt(m);
+          n = parseInt(n);
+          return Math.floor( Math.random() * (n - m + 1) ) + m;
+      }
+    </script>
+</head>
+<body>
+    <button onclick="imagen()">imagen</button>
+    <div id="encabezado"></div>
+    <div class="grafica" style="width: 600px">
+        <canvas id="canvas"></canvas>
+    </div>
+    <!--<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>-->
+    <!--MENU OPCIONES-->
+    <script>
+        /* ===== Logic for creating fake Select Boxes ===== */
+        $('.sel').each(function () {
+            $(this).children('select').css('display', 'none');
+
+            var $current = $(this);
+
+            $(this).find('option').each(function (i) {
+                if (i == 0) {
+                    $current.prepend($('<div>', {
+                        class: $current.attr('class').replace(/sel/g, 'sel__box')
+                    }));
+
+                    var placeholder = $(this).text();
+                    $current.prepend($('<span>', {
+                        class: $current.attr('class').replace(/sel/g, 'sel__placeholder'),
+                        text: placeholder,
+                        'data-placeholder': placeholder
+                    }));
+
+                    return;
+                }
+
+                $current.children('div').append($('<span>', {
+                    class: $current.attr('class').replace(/sel/g, 'sel__box__options'),
+                    text: $(this).text()
+                }));
+            });
+        });
+
+        // Toggling the `.active` state on the `.sel`.
+        $('.sel').click(function () {
+            $(this).toggl eClass('active');
+        });
+
+        // Toggling the `.selected` state on the options.
+        $('.sel__box__options').click(function () {
+            var txt = $(this).text();
+            var index = $(this).index();
+
+            $(this).siblings('.sel__box__options').removeClass('selected');
+            $(this).addClass('selected');
+
+            var $currentSel = $(this).closest('.sel');
+            $currentSel.children('.sel__placeholder').text(txt);
+            $currentSel.children('select').prop('selectedIndex', index + 1);
+        });
+    </script>
+    <script src='../jsPDF-1.3.2/dist/jspdf.debug.js'></script>
+    <script src='../jsPDF-1.3.2/libs/html2pdf.js'></script>
+    <!--GRAFICA-->
+    <script>
+        var days = ['15-ago', '31-ago', '14-sep', '01-oct', '15-oct', '01-nov', '16-nov', '30-nov', '19-dic'];
+        
+        var bandera_graf = true;
+        function grafa() {
+            if (bandera_graf) {
+                var config = {
+                    type: 'line',
+                    data: {
+                        labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'],
+                        datasets: [{
+                            label: 'Porcentaje real', //azul
+                            borderColor: "#14384F",
+                            backgroundColor: "#246289", //#05478a 05478a8c 25333a
+                            data: datos_pr,
+                            //data: [0, 0, 0, 10, 10, 10, 10, 30, 30, 40, 40, 40, 45, 45, 60, 60, 70, 100],
+                            
+                        }, {
+                            label: 'GAP', //amarillo
+                            borderColor: "#CE9E51",
+                                backgroundColor: "#F9BD5D",
+                                data: [5.55, 11.1, 16.65, 22.2, 27.75, 33.3, 38.85, 44.4, 49.95, 55.5, 61.05, 66.6, 72.15, 77.7, 83.25, 88.8, 94.35, 100],
+                                
+                            }
+                            //,{
+                            //label: 'Porcentaje normal', //verde
+                            //borderColor: "#043a11",
+                            //backgroundColor: "#05631d",
+                            //data: [0, 10, 20, 30, 45, 60, 75, 85, 100],
+                            // font-family: 'Gill Sans',
+                            //}
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        title: {
+                            display: true,
+                            text: 'Desempeño de Profesores'
+                            
+                        },             
+                        scales: {
+                            xAxes: [{
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Fecha'
+                                }
+                            }],
+                            yAxes: [{
+                                ticks: {
+                                    min: 0,
+                                    max: 100,
+                                    stepSize: 5
+                                },
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Porcentaje %'
+                                }
+                            }]
+                        }
+                    }
+                };
+                var ctx = document.getElementById('canvas').getContext('2d');
+                window.myLine = new Chart(ctx, config);
+                bandera_graf = false;
+            }
+        };
+        var gra = setInterval(grafa, 1000);
+        function canv(){
+            var pdf = new jsPDF('l', 'pt', 'letter');
+            var canvas = pdf.canvas;
+            //canvas.width = 8.5 * 72;
+            $("#borraconalep").empty();
+            html2canvas(document.body, {
+                canvas:canvas,
+                onrendered: function(canvas) {
+                    //var iframe = document.createElement('iframe');
+                    //iframe.setAttribute('style','position:absolute;right:0; top:0; bottom:0; height:100%; width:500px');
+                    //document.body.appendChild(iframe);
+                    //iframe.src = pdf.output('datauristring');
+                    
+                    pdf.setFillColor(0,107,84);
+                    pdf.circle(80, 60, 30, 'F');
+                    pdf.setFillColor(250,250,250);
+                    pdf.circle(80, 60, 11, 'F');
+
+                    pdf.setDrawColor(255,255,255);
+                    pdf.setLineWidth(10);
+                    pdf.line(80, 67, 120, 45);
+                    pdf.line(40, 77, 80, 54);
+
+                    pdf.setDrawColor(0,107,84);
+                    pdf.setLineWidth(19);
+                    pdf.line(30, 65, 80, 38);
+                    pdf.setLineWidth(18);
+                    pdf.line(80, 83, 132, 55);
+
+                    pdf.setDrawColor(255,255,255);
+                    pdf.setLineWidth(19);
+                    pdf.line(29, 40, 24, 80);
+                    pdf.line(138, 40, 134, 80);
+
+                    pdf.setFont("helvetica");
+                    pdf.setFontSize(25);
+                    pdf.setFontType("bolditalic");
+                    pdf.setTextColor(170, 170, 170);
+                    pdf.text(31, 112, 'conalep');
+                    pdf.setTextColor(0, 107, 84);
+                    pdf.text(30, 111, 'conalep');
+                    
+                    pdf.setFontSize(15);
+                    pdf.text(270, 90, 'Reporte de Avance Matricula');
+
+                    //var nom_archivo = "Potenciometro_"+getUrlParameter("dat_matricula")+".pdf";
+                    var nom_archivo = "grafica.pdf";
+                    pdf.save(nom_archivo);
+                    $("#encabezado").append("<div class='conalep' id='borraconalep'><img src='../ima/conalep.png' width='100'></div>");
+                }
+            });
+        }
+        var bandera = true;
+        //var rel = setInterval(relog, 3000);
+        function relog() {
+            if (bandera) {
+              bandera = false;
+              canv();
+            }
+        }
+
+    </script>
+</body>
+
+
+</html>

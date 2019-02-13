@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script type="text/javascript">
+		function lanza() {
+			document.cookie="user=emma";
+            document.cookie="descrip=123";
+		}
+		function limpiar(cook){
+	        alert("entra a borrar: " + cook);
+	        if (cook === undefined) {
+	          var cookies = document.cookie.split(";");
+	            for (var i = 0; i < cookies.length; i++) {
+	                alert("ema");
+	                var cookie = cookies[i];
+	                var eqPos = cookie.indexOf("=");
+	                var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+	                document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+	            }
+	        }else{
+	          document.cookie = cook + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+	          document.cookie = " "+cook + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+	        }
+	    };
+	</script>
+</head>
+<body>
+	<button onclick="lanza()">lanza</button>
+	<button onclick="alert(document.cookie);">cook</button>
+          <button onclick="limpiar()">limpiar</button>
+</body>
+</html>

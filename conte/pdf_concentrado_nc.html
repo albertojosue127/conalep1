@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Reportes</title>
+    <!--<link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.css" />-->
+    <style type="text/css">
+      table{
+        margin-left: 40px;
+        margin-top: 20px;
+        font-size: .4em;
+        border-collapse: collapse;
+      }
+      table th, td, tr {
+        border: 1px solid black;
+      }
+      
+      .pfddata{
+        font-size: .8em;
+        margin-left: 530px;
+        margin-top: 50px;
+        margin-bottom: 30px;
+      }
+      .pfdtitulo{
+        position: absolute;
+        font-size: 1em;
+        left: 300px;
+        top: 120px;
+      }
+      .aludata{
+        font-size: 1em;
+        margin-left: 50px;
+      }
+      .descripdata{
+        margin-top: 10px;
+        font-size: .5em;
+        margin-left: 35px;
+      }
+      .descripdata > label{
+        float: left;
+      }
+      .cuadridata{
+        width: 30px;
+        height: 10px;
+        border: 1px solid black;
+        margin-right: 5px;
+        margin-left: 5px;
+        float: left;
+        text-align: center;
+      }
+      .conalep{
+        position: absolute;
+        font-size: 2.5em;
+        font-family: sans-serif;
+        font-weight: bold;
+        text-shadow: 2px 2px #aaa;
+        color: #006b54;
+        width: 220px;
+        height: 110px;
+        top: 0px;
+        left: 25px;
+      }
+      .conalep > span{
+        font-size: .2em;
+        text-shadow: 1px 1px #aaa;
+        position: absolute;
+        top: 45px;
+        left: 6px;
+      }
+      .contine{
+        position: absolute;
+        top: 130px;
+        left: 25px;
+        //background-color: orange;
+        width: 750px;
+        height: 50px;
+        opacity: .8;
+      }
+      .inboxx{
+        float: left;
+        background-color: #dd4b39;
+        width: 20%;
+        text-align: center;
+        height: 45px;
+        border-radius: 5px;
+        margin: 2%;
+      }
+      .inboxx > b{
+        font-size: 1.5em;
+      }
+      .inboxx > label{
+        font-size: .8em;
+      }
+      .firma{
+        margin-top: 40px;
+        font-size: .8em;
+        text-align: center;
+        width: 750px;
+      }
+    </style>
+    <script src="../js/jquery-3.3.1.js"></script>
+    
+    <script type="text/javascript">
+        var getUrlParameter = function getUrlParameter(sParam) {
+            var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : sParameterName[1];
+                }
+            }
+        }; 
+    //alert(getUrlParameter("matricula"));
+    var titulos = 0;
+    function principal(dat_cvegrupo){
+        $.ajax({
+           type: "POST",
+           processData: false,
+           url: '../fun/sabana.php?dat_cvegrupo='+dat_cvegrupo+"&periodoescolar="+getUrlParameter("periodoescolar")+"&cvemodeloeducativo="+getUrlParameter("cvemodeloeducativo")+"&cveunidadmin="+getUrlParameter("cveunidadmin"),
+           //url: '../fun/sabana.php?dat_cvegrupo='+getUrlParameter("dat_cvegrupo")+"&periodoescolar="+getUrlParameter("periodoescolar")+"&cvemodeloeducativo="+getUrlParameter("cvemodeloeducativo")+"&cveunidadmin="+getUrlParameter("cveunidadmin"),
+           cache: false,
+           data: $(this).serialize(),
+           success: function(dat)
+           {
+            //alert(dat);
+            var data = dat.split("%");
+            //**********************ANALISIS DE PORCENTAJES***********************
+            var m_alto = [0,0,0,0,0,0,0,0];
+            var m_7 = []; 
+            var m_5 = [];
+            var datar = data[1].split("&");
+            for (var i = 1; i < datar.length; i++) {
+              var datarr = datar[i].split("|");
+              if (parseFloat(datarr[2]) > m_alto[0]) {
+                m_alto[0] = datarr[2];
+              }
+              if (parseFloat(datarr[3]) > m_alto[1]) {
+                m_alto[1] = datarr[3];
+              }
+              if (parseFloat(datarr[4]) > m_alto[2]) {
+                m_alto[2] = datarr[4];
+              }
+              if (parseFloat(datarr[5]) > m_alto[3]) {
+                m_alto[3] = datarr[5];
+              }
+              if (parseFloat(datarr[6]) > m_alto[4]) {
+                m_alto[4] = datarr[6];
+              }
+              if (parseFloat(datarr[7]) > m_alto[5]) {
+                m_alto[5] = datarr[7];
+              }
+              if (parseFloat(datarr[8]) > m_alto[6]) {
+                m_alto[6] = datarr[8];
+              }
+              if (parseFloat(datarr[9]) > m_alto[7]) {
+                m_alto[7] = datarr[9];
+              }
+            }
+            for (var i = 0; i < m_alto.length; i++) {
+              m_7.push((m_alto[i]*0.70).toFixed(2));
+              m_5.push((m_alto[i]*0.50).toFixed(2));
+            }
+            //**********************COLOCA COLORES MATERIAS***********************
+            var m_c = [0,0,0,0,0,0,0,0];
+            var m_i = [0,0,0,0,0,0,0,0];
+            var m_a = [0,0,0,0,0,0,0,0];
+            var m_inb = false; m_inn = 0;
+            var m_anb = false; m_ann = 0;
+            var m_limpiosn = 0;
+            var m_nocomp = 0;
+            for (var i = 1; i < datar.length; i++) {
+              m_inb = false;
+              m_anb = false;
+              var datarr = datar[i].split("|");
+              //**********************COLOCA COLORES MATERIA 1***********************              
+              if(parseFloat(datarr[2])<m_5[0]){
+                m_a[0]++;
+                m_anb = true;
+              } 
+              if(parseFloat(datarr[2])<m_7[0] && parseFloat(datarr[2])>=m_5[0]){
+                m_i[0]++;
+                m_inb = true;
+              }
+              if(parseFloat(datarr[2])>=m_7[0]){
+                m_c[0]++;
+              }
+              //**********************COLOCA COLORES MATERIA 2***********************
+              if(parseFloat(datarr[3])<m_5[1]){
+                m_a[1]++;
+                m_anb = true;
+              } 
+              if(parseFloat(datarr[3])<m_7[1] && parseFloat(datarr[3])>=m_5[1]){
+                m_i[1]++;
+                m_inb = true;
+              }
+              if(parseFloat(datarr[3])>=m_7[1]){
+                m_c[1]++;
+              }
+              //**********************COLOCA COLORES MATERIA 3***********************
+              if(parseFloat(datarr[4])<m_5[2]){
+                m_a[2]++;
+                m_anb = true;
+              } 
+              if(parseFloat(datarr[4])<m_7[2] && parseFloat(datarr[4])>=m_5[2]){
+                m_i[2]++;
+                m_inb = true;
+              }
+              if(parseFloat(datarr[4])>=m_7[2]){
+                m_c[2]++;
+              }
+              //**********************COLOCA COLORES MATERIA 4***********************
+              if(parseFloat(datarr[5])<m_5[3]){
+                m_a[3]++;
+                m_anb = true;
+              } 
+              if(parseFloat(datarr[5])<m_7[3] && parseFloat(datarr[5])>=m_5[3]){
+                m_i[3]++;
+                m_inb = true;
+              }
+              if(parseFloat(datarr[5])>=m_7[3]){
+                m_c[3]++;
+              }
+              //**********************COLOCA COLORES MATERIA 5***********************
+              if(parseFloat(datarr[6])<m_5[4]){
+                m_a[4]++;
+                m_anb = true;
+              } 
+              if(parseFloat(datarr[6])<m_7[4] && parseFloat(datarr[6])>=m_5[4]){
+                m_i[4]++;
+                m_inb = true;
+              }
+              if(parseFloat(datarr[6])>=m_7[4]){
+                m_c[4]++;
+              }
+              //**********************COLOCA COLORES MATERIA 6***********************
+              if(parseFloat(datarr[7])<m_5[5]){
+                m_a[5]++;
+                m_anb = true;
+              } 
+              if(parseFloat(datarr[7])<m_7[5] && parseFloat(datarr[7])>=m_5[5]){
+                m_i[5]++;
+                m_inb = true;
+              }
+              if(parseFloat(datarr[7])>=m_7[5]){
+                m_c[5]++;
+              }
+              //**********************COLOCA COLORES MATERIA 7***********************
+              if(parseFloat(datarr[8])<m_5[6]){
+                m_a[6]++;
+                m_anb = true;
+              } 
+              if(parseFloat(datarr[8])<m_7[6] && parseFloat(datarr[8])>=m_5[6]){
+                m_i[6]++;
+                m_inb = true;
+              }
+              if(parseFloat(datarr[8])>=m_7[6]){
+                m_c[6]++;
+              }
+              //**********************COLOCA COLORES MATERIA 8***********************
+              if(parseFloat(datarr[9])<m_5[7]){
+                m_a[7]++;
+                m_anb = true;
+              } 
+              if(parseFloat(datarr[9])<m_7[7] && parseFloat(datarr[9])>=m_5[7]){
+                m_i[7]++;
+                m_inb = true;
+              }
+              if(parseFloat(datarr[9])>=m_7[7]){
+                m_c[7]++;
+              }
+
+
+              if (m_anb) {
+                m_ann++;
+              }
+              if (m_inb) {
+                m_inn++;
+              }
+              if (m_anb || m_inb) {
+
+              }else{
+                m_limpiosn++; 
+              }
+            }
+            for (var i = 0; i < m_i.length; i++) {
+              m_nocomp = m_nocomp + m_i[i] + m_a[i];
+            }
+            //alert(m_inn);
+            var totalalumnos = datar.length - 1;
+            datar = data[0].split("&");
+            var g_m = dat_cvegrupo.split("-");
+            $("#"+dat_cvegrupo).append("<td>"+g_m[0]+"</td><td>"+g_m[1]+"</td><td>"+totalalumnos+"</td><td>"+(m_ann + m_inn)+"</td>");
+
+            for (var i = 1; i < datar.length; i++) {
+              var datarr = datar[i].split("|");//
+              //alert(datar[i]);
+              //var nomb_docente = datarr[3].replace(/ /g, "_");
+              var nomb_doc = datarr[4].split(" ");
+              var nomb_docente = nomb_doc[0] + "_" + nomb_doc[1];
+              var porcen = ((100/totalalumnos)*(parseInt(m_i[i-1])+parseInt(m_a[i-1]))).toFixed(2);
+              
+              if (titulos < 8) {
+                $("#titulos").append("<th>"+datarr[0]+"</th><th>INT</th><th>AC</th><th>%</th><th>DOCENTE</th>");
+                titulos++;
+              }
+              //alert(datarr[0]);
+              $("#"+dat_cvegrupo).append("<td style='text-align:center;'>"+(parseInt(m_i[i-1])+parseInt(m_a[i-1]))+"</td><td style='text-align:center;'>"+m_i[i-1]+"</td><td style='text-align:center;'>"+m_a[i-1]+"</td>");
+              if (porcen > 30) {
+                $("#"+dat_cvegrupo).append("<td style='text-align:center; background-color: red;'>"+porcen+"%</td><td style='background-color: red;'>"+nomb_docente+"</td>");
+              }else{
+                if (porcen > 20) {
+                  $("#"+dat_cvegrupo).append("<td style='text-align:center; background-color: yellow;'>"+porcen+"%</td><td style='background-color: yellow;'>"+nomb_docente+"</td>");
+                }else{
+                  if (porcen > 10) {
+                    $("#"+dat_cvegrupo).append("<td style='text-align:center; background-color: blue;'>"+porcen+"%</td><td style='background-color: blue;'>"+nomb_docente+"</td>");
+                  }else{
+                    $("#"+dat_cvegrupo).append("<td style='text-align:center;'>"+porcen+"%</td><td>"+nomb_docente+"</td>");
+                  }
+                }
+              }
+            }
+           }
+        });
+    }
+    var grado1 = [];
+    var grado2 = [];
+    var grado3 = [];
+    var grado4 = [];
+    var grado5 = [];
+    var grado6 = [];
+    var gradoact;
+    $(document).ready(function(){
+
+      switch(getUrlParameter("semestre")){
+        case "1":   gradoact = grado1;
+                    break;
+        case "2":   gradoact = grado2;
+                    break;
+        case "3":   gradoact = grado3;
+                    break;
+        case "4":   gradoact = grado4;
+                    break;
+        case "5":   gradoact = grado5;
+                    break;
+        case "6":   gradoact = grado6;
+                    break;
+        default:    //alert("NADA");
+                    break;
+      }
+
+      $.ajax({
+           type: "POST",
+           processData: false,
+           url: '../fun/fun.php?periodoescolar='+getUrlParameter("periodoescolar")+"&cvemodeloeducativo="+getUrlParameter("cvemodeloeducativo")+"&dat_unidadmin_rm="+getUrlParameter("cveunidadmin"),
+           cache: false,
+           data: $(this).serialize(),
+           success: function(data)
+           {
+            //alert(data);
+            $("#datos").append("<tr id='titulos'><th>GPO</th><th>CARR</th><th>Mat</th><th>NC</th><tr>");
+            var datar = data.split("|");
+            for (var i = 1; i < datar.length; i++) {
+              switch(datar[i].substring(0, 1)){
+                case "1":   grado1.push(datar[i]);
+                            break;
+                case "2":   grado2.push(datar[i]);
+                            break;
+                case "3":   grado3.push(datar[i]);
+                            break;
+                case "4":   grado4.push(datar[i]);
+                            break;
+                case "5":   grado5.push(datar[i]);
+                            break;
+                case "6":   grado6.push(datar[i]);
+                            break;
+                default:    break;
+              }
+            }
+            //alert(grado1);
+            for (var i = 0; i < grado1.length; i++) {
+              $("#datos").append("<tr id='"+grado1[i]+"'><tr>");
+              principal(grado1[i]);
+            }
+           }
+      });
+      /*var data = "0|101-EMEC08|102-INFO08|103-MECA08|301-ASDI08|301-EMEC08|302-ASDI08|302-INFO08|303-EMEC08|303-MECA08|304-EMEC08|305-INFO08|306-INFO08|308-MECA08|309-MECA08|310-MECA08|312-INFO08|313-MECA08|350-ASDI08|351-EMEC08|352-INFO08|501-ASDI08|502-EMEC08|503-EMEC08|504-INFO08|505-INFO08|507-MECA08|508-MECA08|509-MECA08|550-ASDI08|551-MECA08|552-INFO08|553-EMEC08";
+      //var data = "0|101-PROI18";
+      
+      $("#datos").append("<tr id='titulos'><th>GPO</th><th>CARR</th><th>MAT</th><th>NC</th><tr>");
+      var datar = data.split("|");
+      for (var i = 1; i < datar.length; i++) {
+        switch(datar[i].substring(0, 1)){
+          case "1":   grado1.push(datar[i]);
+                      break;
+          case "2":   grado2.push(datar[i]);
+                      break;
+          case "3":   grado3.push(datar[i]);
+                      break;
+          case "4":   grado4.push(datar[i]);
+                      break;
+          case "5":   grado5.push(datar[i]);
+                      break;
+          case "6":   grado6.push(datar[i]);
+                      break;
+          default:    break;
+        }
+      }
+      alert(grado1);
+      for (var i = 0; i < grado1.length; i++) {
+        $("#datos").append("<tr id='"+grado1[i]+"'><tr>");
+        principal(grado1[i]);
+      }*/
+      $("#encabezado").append("<div class='pfddata'>Plantel:"+"Conalep_Santiago_Tianquistenco"+"<br>Periodo_Escolar:"+getUrlParameter("periodoescolar")+"<br>Fecha_Emisión:"+fech()+"<br><br></div>");
+      $("#encabezado").append("<div class='aludata'><b>Semestre:"+1+"°</b></div>");
+      $("#encabezado").append("<div class='pfdtitulo' id='pfdtitulo'><b>Reprobación grupo módulo docente</b></div>");
+    });
+  
+    function fech(){
+      var mo = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+      var da = new Date();
+      var di = da.getDate();
+      var me = mo[da.getMonth()];
+      var an = da.getYear();
+      var ann = an.toString();
+      var annn = ann.substring(1);
+      return(di + "/" + me + "/" + annn);
+    };
+
+    var bandera_clon = true;
+    var rel = setInterval(clona, 4000);
+    function clona(){
+      if (bandera_clon) {
+        bandera_clon = false;
+        //alert($('#datos').find("tr:eq(2)").find("td:eq(1)").text());
+        $("#datos").clone().appendTo(document.body);
+        $("#datos").clone().appendTo(document.body);
+        $("#datos").attr("id","datos_1");
+        $("#datos").attr("id","datos_2");
+        $("#datos").attr("id","datos_3");
+
+        for (var i = 43; i >= 24; i--) {
+          $('#datos_2').find("tr:eq(0)").find("th:eq("+i+")").remove();
+          $('#datos_2').find("tr:eq(1)").find("td:eq("+i+")").remove();
+          $('#datos_2').find("tr:eq(2)").find("td:eq("+i+")").remove();
+          $('#datos_2').find("tr:eq(3)").find("td:eq("+i+")").remove();
+          $('#datos_2').find("tr:eq(4)").find("td:eq("+i+")").remove();
+          $('#datos_2').find("tr:eq(5)").find("td:eq("+i+")").remove();
+          $('#datos_2').find("tr:eq(6)").find("td:eq("+i+")").remove();
+          $('#datos_2').find("tr:eq(7)").find("td:eq("+i+")").remove();
+          $('#datos_2').find("tr:eq(8)").find("td:eq("+i+")").remove();
+          $('#datos_2').find("tr:eq(9)").find("td:eq("+i+")").remove();
+          $('#datos_2').find("tr:eq(10)").find("td:eq("+i+")").remove();
+          $('#datos_2').find("tr:eq(11)").find("td:eq("+i+")").remove();
+          //NO SE POR QUE PERO LAS TABLAS CREADAS CON AJAX NO SE RESPETA TALCUAL EL HTML (DOBLE DECOLUMNAS PARA REMOVER)
+          $('#datos_2').find("tr:eq(12)").find("td:eq("+i+")").remove();
+          $('#datos_2').find("tr:eq(13)").find("td:eq("+i+")").remove();
+          $('#datos_2').find("tr:eq(14)").find("td:eq("+i+")").remove();
+          $('#datos_2').find("tr:eq(15)").find("td:eq("+i+")").remove();
+          $('#datos_2').find("tr:eq(16)").find("td:eq("+i+")").remove();
+          $('#datos_2').find("tr:eq(17)").find("td:eq("+i+")").remove(); 
+          $('#datos_2').find("tr:eq(18)").find("td:eq("+i+")").remove();
+          $('#datos_2').find("tr:eq(19)").find("td:eq("+i+")").remove();
+          $('#datos_2').find("tr:eq(20)").find("td:eq("+i+")").remove();
+          $('#datos_2').find("tr:eq(21)").find("td:eq("+i+")").remove();
+          $('#datos_2').find("tr:eq(22)").find("td:eq("+i+")").remove();
+          $('#datos_2').find("tr:eq(23)").find("td:eq("+i+")").remove();
+          $('#datos_2').find("tr:eq(24)").find("td:eq("+i+")").remove();
+          $('#datos_2').find("tr:eq(25)").find("td:eq("+i+")").remove();
+          $('#datos_2').find("tr:eq(26)").find("td:eq("+i+")").remove();
+          $('#datos_2').find("tr:eq(27)").find("td:eq("+i+")").remove();
+          $('#datos_2').find("tr:eq(28)").find("td:eq("+i+")").remove(); 
+          $('#datos_2').find("tr:eq(29)").find("td:eq("+i+")").remove();
+          $('#datos_2').find("tr:eq(30)").find("td:eq("+i+")").remove();
+          $('#datos_2').find("tr:eq(31)").find("td:eq("+i+")").remove();
+          $('#datos_2').find("tr:eq(32)").find("td:eq("+i+")").remove();
+          $('#datos_2').find("tr:eq(33)").find("td:eq("+i+")").remove();
+        }
+        for (var i = 4; i <= 23; i++) {
+          $('#datos_3').find("tr:eq(0)").find("th:eq(4)").remove();
+          $('#datos_3').find("tr:eq(1)").find("td:eq(4)").remove();
+          $('#datos_3').find("tr:eq(2)").find("td:eq(4)").remove();
+          $('#datos_3').find("tr:eq(3)").find("td:eq(4)").remove();
+          $('#datos_3').find("tr:eq(4)").find("td:eq(4)").remove();
+          $('#datos_3').find("tr:eq(5)").find("td:eq(4)").remove();
+          $('#datos_3').find("tr:eq(6)").find("td:eq(4)").remove();
+          $('#datos_3').find("tr:eq(7)").find("td:eq(4)").remove();
+          $('#datos_3').find("tr:eq(8)").find("td:eq(4)").remove();
+          $('#datos_3').find("tr:eq(9)").find("td:eq(4)").remove();
+          $('#datos_3').find("tr:eq(10)").find("td:eq(4)").remove();
+          $('#datos_3').find("tr:eq(11)").find("td:eq(4)").remove();
+          //NO SE POR QUE PERO LAS TABLAS CREADAS CON AJAX NO SE RESPETA TALCUAL EL HTML (DOBLE DECOLUMNAS PARA REMOVER)
+          $('#datos_3').find("tr:eq(12)").find("td:eq(4)").remove();
+          $('#datos_3').find("tr:eq(13)").find("td:eq(4)").remove();
+          $('#datos_3').find("tr:eq(14)").find("td:eq(4)").remove();
+          $('#datos_3').find("tr:eq(15)").find("td:eq(4)").remove();
+          $('#datos_3').find("tr:eq(16)").find("td:eq(4)").remove();
+          $('#datos_3').find("tr:eq(17)").find("td:eq(4)").remove();
+          $('#datos_3').find("tr:eq(18)").find("td:eq(4)").remove();
+          $('#datos_3').find("tr:eq(19)").find("td:eq(4)").remove();
+          $('#datos_3').find("tr:eq(20)").find("td:eq(4)").remove();
+          $('#datos_3').find("tr:eq(21)").find("td:eq(4)").remove();
+          $('#datos_3').find("tr:eq(22)").find("td:eq(4)").remove();
+          $('#datos_3').find("tr:eq(23)").find("td:eq(4)").remove();
+          $('#datos_3').find("tr:eq(24)").find("td:eq(4)").remove();
+          $('#datos_3').find("tr:eq(25)").find("td:eq(4)").remove();
+          $('#datos_3').find("tr:eq(26)").find("td:eq(4)").remove();
+          $('#datos_3').find("tr:eq(27)").find("td:eq(4)").remove();
+          $('#datos_3').find("tr:eq(28)").find("td:eq(4)").remove();
+          $('#datos_3').find("tr:eq(29)").find("td:eq(4)").remove();
+          $('#datos_3').find("tr:eq(30)").find("td:eq(4)").remove();
+          $('#datos_3').find("tr:eq(31)").find("td:eq(4)").remove();
+          $('#datos_3').find("tr:eq(32)").find("td:eq(4)").remove();
+          $('#datos_3').find("tr:eq(33)").find("td:eq(4)").remove();
+        }
+        $("#datos_1").remove();
+        $(document.body).append("<div class='descripdata'><div class='cuadridata' style='background-color:blue;'></div><label>Porcentaje_Mayor_a_10%</label><div class='cuadridata' style='background-color:yellow;'></div><label>Porcentaje_Mayor_a_20%</label><div class='cuadridata' style='background-color:red;'></div><label>Porcentaje_Mayor_a_30%</label><div class='cuadridata'>INT</div><label>Asesorias_Intersemestrales</label><div class='cuadridata'>AC</div><label>Asesorias_Complementarias</label></div>");
+      }
+    }
+  </script>
+  </head>
+  <body>
+    <!--<button onclick="clona()">clona</button>-->
+    
+    <!--<img src="../ima/conalep.png">-->
+    <div id="encabezado">
+      
+    </div>
+    <table id="datos" class="table"></table>
+    <!--<table id="datos" class="table">
+      <tr id="titulos"><th>GPO</th><th>CARR</th><th>MAT</th><th>NC</th><th>MAEC05</th><th>IN</th><th>AC</th><th>%</th><th>DOC</th><th>ININ03</th><th>INT</th><th>AC</th><th>%</th><th>DOC</th><th>AMAE04</th><th>INT</th><th>AC</th><th>%</th><th>DOC</th><th>COIN04</th><th>INT</th><th>AC</th><th>%</th><th>DOC</th><th>PIPM04</th><th>INT</th><th>AC</th><th>%</th><th>DOC</th><th>PROP05</th><th>INT</th><th>AC</th><th>%</th><th>DOC</th><th>REDE04</th><th>INT</th><th>AC</th><th>%</th><th>DOC</th><th>APRE04</th><th>INT</th><th>AC</th><th>%</th><th>DOC</th></tr>
+      <tr id="101-PROI18"><td>101</td>
+        <td>PROI18</td>
+        <td>39</td>
+        <td>19</td>
+        <td style="text-align:center;">6</td>
+        <td style="text-align:center;">1</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center; background-color: blue;">15.38%</td>
+        <td style="background-color: blue;">GONZALEZ_VARA_*MARTHA_ISELA</td>
+        <td style="text-align:center;">13</td>
+        <td style="text-align:center;">9</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center; background-color: red;">33.33%</td>
+        <td style="background-color: red;">FIGUEROA_HERNANDEZ_*EDITH</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center;">7.69%</td>
+        <td>DAVID_REZA_*JOEL</td>
+        <td style="text-align:center;">6</td>
+        <td style="text-align:center;">2</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center; background-color: blue;">15.38%</td>
+        <td style="background-color: blue;">AVILA_MORALES_*ARELI</td>
+        <td style="text-align:center;">6</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center; background-color: blue;">15.38%</td>
+        <td style="background-color: blue;">PEREZ_MARTINEZ_*DULCE_ANGELICA</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center;">7.69%</td>
+        <td>GALLEGOS_MILLAN_*AUSTREBERTO</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center;">7.69%</td>
+        <td>OLIVARES_HERNANDEZ_*DORA</td>
+        <td style="text-align:center;">7</td>
+        <td style="text-align:center;">2</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center; background-color: blue;">17.95%</td>
+        <td style="background-color: blue;">ARMAS_ROSAS_*AZUCENA</td>
+      </tr>
+      <tr id="102-EMEC18"><td>102</td>
+        <td>EMEC18</td>
+        <td>37</td>
+        <td>41</td>
+        <td style="text-align:center;">9</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center;">6</td>
+        <td style="text-align:center; background-color: yellow;">24.32%</td>
+        <td style="background-color: yellow;">GONZALEZ_VARA_*MARTHA_ISELA</td>
+        <td style="text-align:center;">16</td>
+        <td style="text-align:center;">10</td>
+        <td style="text-align:center;">6</td>
+        <td style="text-align:center; background-color: red;">43.24%</td>
+        <td style="background-color: red;">FIGUEROA_HERNANDEZ_*EDITH</td>
+        <td style="text-align:center;">17</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">12</td>
+        <td style="text-align:center; background-color: red;">45.95%</td>
+        <td style="background-color: red;">RIVERA_REYES_*GUADALUPE_ALEJANDRA</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center; background-color: blue;">10.81%</td>
+        <td style="background-color: blue;">JUAREZ_SOLIS_*LILIANA</td>
+        <td style="text-align:center;">18</td>
+        <td style="text-align:center;">6</td>
+        <td style="text-align:center;">12</td>
+        <td style="text-align:center; background-color: red;">48.65%</td>
+        <td style="background-color: red;">GUZMAN_BENITEZ_*DANIEL_ALBERTO</td>
+        <td style="text-align:center;">14</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center;">14</td>
+        <td style="text-align:center; background-color: red;">37.84%</td>
+        <td style="background-color: red;">ARMAS_ROSAS_*AZUCENA</td>
+        <td style="text-align:center;">14</td>
+        <td style="text-align:center;">1</td>
+        <td style="text-align:center;">13</td>
+        <td style="text-align:center; background-color: red;">37.84%</td>
+        <td style="background-color: red;">OLIVARES_HERNANDEZ_*DORA</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center;">1</td>
+        <td style="text-align:center;">2</td>
+        <td style="text-align:center;">8.11%</td>
+        <td>DAVID_REZA_*JOEL</td>
+      </tr>
+      <tr id="103-EMEC18"><td>103</td>
+        <td>EMEC18</td>
+        <td>31</td>
+        <td>18</td>
+        <td style="text-align:center;">8</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center; background-color: yellow;">25.81%</td>
+        <td style="background-color: yellow;">DELGADILLO_ESQUIVEL_*EDGAR</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">1</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center; background-color: blue;">16.13%</td>
+        <td style="background-color: blue;">FIGUEROA_HERNANDEZ_*EDITH</td>
+        <td style="text-align:center;">9</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center;">6</td>
+        <td style="text-align:center; background-color: yellow;">29.03%</td>
+        <td style="background-color: yellow;">RIVERA_REYES_*GUADALUPE_ALEJANDRA</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center;">0.00%</td>
+        <td>JUAREZ_SOLIS_*LILIANA</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center;">0.00%</td>
+        <td>JUAREZ_LOPEZ_*IGNACIO</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center; background-color: blue;">12.90%</td>
+        <td style="background-color: blue;">CASTAÑEDA_VAZQUEZ_*MIREYA</td>
+        <td style="text-align:center;">6</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center; background-color: blue;">19.35%</td>
+        <td style="background-color: blue;">AVILA_MORALES_*ARELI</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center;">1</td>
+        <td style="text-align:center; background-color: blue;">12.90%</td>
+        <td style="background-color: blue;">DAVID_REZA_*JOEL</td>
+      </tr>
+      <tr id="104-EMEC18"><td>104</td>
+        <td>EMEC18</td>
+        <td>33</td>
+        <td>44</td>
+        <td style="text-align:center;">20</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">15</td>
+        <td style="text-align:center; background-color: red;">60.61%</td>
+        <td style="background-color: red;">MOCTEZUMA_ERASMO_*ABRAHAM</td>
+        <td style="text-align:center;">21</td>
+        <td style="text-align:center;">17</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center; background-color: red;">63.64%</td>
+        <td style="background-color: red;">FIGUEROA_HERNANDEZ_*EDITH</td>
+        <td style="text-align:center;">11</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">6</td>
+        <td style="text-align:center; background-color: red;">33.33%</td>
+        <td style="background-color: red;">RIVERA_REYES_*GUADALUPE_ALEJANDRA</td>
+        <td style="text-align:center;">11</td>
+        <td style="text-align:center;">8</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center; background-color: red;">33.33%</td>
+        <td style="background-color: red;">AVILA_MORALES_*ARELI</td>
+        <td style="text-align:center;">17</td>
+        <td style="text-align:center;">11</td>
+        <td style="text-align:center;">6</td>
+        <td style="text-align:center; background-color: red;">51.52%</td>
+        <td style="background-color: red;">GUZMAN_BENITEZ_*DANIEL_ALBERTO</td>
+        <td style="text-align:center;">11</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center;">8</td>
+        <td style="text-align:center; background-color: red;">33.33%</td>
+        <td style="background-color: red;">GALLEGOS_MILLAN_*AUSTREBERTO</td>
+        <td style="text-align:center;">9</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center; background-color: yellow;">27.27%</td>
+        <td style="background-color: yellow;">OLIVARES_HERNANDEZ_*DORA</td>
+        <td style="text-align:center;">10</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center; background-color: red;">30.30%</td>
+        <td style="background-color: red;">ARMAS_ROSAS_*AZUCENA</td>
+      </tr>
+      <tr id="105-INFO18"><td>105</td>
+        <td>INFO18</td>
+        <td>36</td>
+        <td>28</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center;">1</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center; background-color: blue;">11.11%</td>
+        <td style="background-color: blue;">GONZALEZ_VARA_*MARTHA_ISELA</td>
+        <td style="text-align:center;">11</td>
+        <td style="text-align:center;">9</td>
+        <td style="text-align:center;">2</td>
+        <td style="text-align:center; background-color: red;">30.56%</td>
+        <td style="background-color: red;">FIGUEROA_HERNANDEZ_*EDITH</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center;">2</td>
+        <td style="text-align:center;">1</td>
+        <td style="text-align:center;">8.33%</td>
+        <td>DAVID_REZA_*JOEL</td>
+        <td style="text-align:center;">1</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center;">1</td>
+        <td style="text-align:center;">2.78%</td>
+        <td>JUAREZ_SOLIS_*LILIANA</td>
+        <td style="text-align:center;">22</td>
+        <td style="text-align:center;">19</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center; background-color: red;">61.11%</td>
+        <td style="background-color: red;">ARMAS_ROSAS_*CECILIA</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center;">1</td>
+        <td style="text-align:center; background-color: blue;">13.89%</td>
+        <td style="background-color: blue;">ARMAS_ROSAS_*AZUCENA</td>
+        <td style="text-align:center;">6</td>
+        <td style="text-align:center;">2</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center; background-color: blue;">16.67%</td>
+        <td style="background-color: blue;">VAZQUEZ_LOPEZ_*FERNANDO</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center;">0.00%</td>
+        <td>CHAVARRIA_MILLAN_*GUADALUPE</td>
+      </tr>
+      <tr id="106-INFO18"><td>106</td>
+        <td>INFO18</td>
+        <td>36</td>
+        <td>42</td>
+        <td style="text-align:center;">20</td>
+        <td style="text-align:center;">7</td>
+        <td style="text-align:center;">13</td>
+        <td style="text-align:center; background-color: red;">55.56%</td>
+        <td style="background-color: red;">MIRANDA_CARMONA_*GERARDO_ERNESTO</td>
+        <td style="text-align:center;">8</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center;">8</td>
+        <td style="text-align:center; background-color: yellow;">22.22%</td>
+        <td style="background-color: yellow;">VILLEGAS_PORCAYO_*ALICIA</td>
+        <td style="text-align:center;">10</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center; background-color: yellow;">27.78%</td>
+        <td style="background-color: yellow;">RIVERA_REYES_*GUADALUPE_ALEJANDRA</td>
+        <td style="text-align:center;">11</td>
+        <td style="text-align:center;">10</td>
+        <td style="text-align:center;">1</td>
+        <td style="text-align:center; background-color: red;">30.56%</td>
+        <td style="background-color: red;">HERNANDEZ_TORRES_*ESMERALDA</td>
+        <td style="text-align:center;">19</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center;">15</td>
+        <td style="text-align:center; background-color: red;">52.78%</td>
+        <td style="background-color: red;">GUZMAN_BENITEZ_*DANIEL_ALBERTO</td>
+        <td style="text-align:center;">7</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">2</td>
+        <td style="text-align:center; background-color: blue;">19.44%</td>
+        <td style="background-color: blue;">GALLEGOS_MILLAN_*AUSTREBERTO</td>
+        <td style="text-align:center;">8</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center; background-color: yellow;">22.22%</td>
+        <td style="background-color: yellow;">ARMAS_ROSAS_*AZUCENA</td>
+        <td style="text-align:center;">16</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center;">13</td>
+        <td style="text-align:center; background-color: red;">44.44%</td>
+        <td style="background-color: red;">PEÑA_DAVILA_*EDUARDO</td>
+      </tr>
+      <tr id="107-INFO18"><td>107</td>
+        <td>INFO18</td>
+        <td>33</td>
+        <td>34</td>
+        <td style="text-align:center;">12</td>
+        <td style="text-align:center;">6</td>
+        <td style="text-align:center;">6</td>
+        <td style="text-align:center; background-color: red;">36.36%</td>
+        <td style="background-color: red;">MIRANDA_CARMONA_*GERARDO_ERNESTO</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center;">1</td>
+        <td style="text-align:center;">2</td>
+        <td style="text-align:center;">9.09%</td>
+        <td>FIGUEROA_HERNANDEZ_*EDITH</td>
+        <td style="text-align:center;">6</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center; background-color: blue;">18.18%</td>
+        <td style="background-color: blue;">DAVID_REZA_*JOEL</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center; background-color: blue;">15.15%</td>
+        <td style="background-color: blue;">HERNANDEZ_TORRES_*ESMERALDA</td>
+        <td style="text-align:center;">24</td>
+        <td style="text-align:center;">15</td>
+        <td style="text-align:center;">9</td>
+        <td style="text-align:center; background-color: red;">72.73%</td>
+        <td style="background-color: red;">ARMAS_ROSAS_*CECILIA</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center;">2</td>
+        <td style="text-align:center;">1</td>
+        <td style="text-align:center;">9.09%</td>
+        <td>AVILA_MORALES_*ARELI</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center;">2</td>
+        <td style="text-align:center;">1</td>
+        <td style="text-align:center;">9.09%</td>
+        <td>CASTAÑEDA_VAZQUEZ_*MIREYA</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">1</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center; background-color: blue;">15.15%</td>
+        <td style="background-color: blue;">PEÑA_DAVILA_*EDUARDO</td>
+      </tr>
+      <tr id="108-MECA18"><td>108</td>
+        <td>MECA18</td>
+        <td>45</td>
+        <td>33</td>
+        <td style="text-align:center;">19</td>
+        <td style="text-align:center;">10</td>
+        <td style="text-align:center;">9</td>
+        <td style="text-align:center; background-color: red;">42.22%</td>
+        <td style="background-color: red;">MIRANDA_CARMONA_*GERARDO_ERNESTO</td>
+        <td style="text-align:center;">9</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center;">9</td>
+        <td style="text-align:center; background-color: blue;">20.00%</td>
+        <td style="background-color: blue;">VILLEGAS_PORCAYO_*ALICIA</td>
+        <td style="text-align:center;">11</td>
+        <td style="text-align:center;">7</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center; background-color: yellow;">24.44%</td>
+        <td style="background-color: yellow;">DAVID_REZA_*JOEL</td>
+        <td style="text-align:center;">6</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">1</td>
+        <td style="text-align:center; background-color: blue;">13.33%</td>
+        <td style="background-color: blue;">HERNANDEZ_TORRES_*ESMERALDA</td>
+        <td style="text-align:center;">1</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center;">1</td>
+        <td style="text-align:center;">2.22%</td>
+        <td>JUAREZ_LOPEZ_*IGNACIO</td>
+        <td style="text-align:center;">10</td>
+        <td style="text-align:center;">8</td>
+        <td style="text-align:center;">2</td>
+        <td style="text-align:center; background-color: yellow;">22.22%</td>
+        <td style="background-color: yellow;">AVILA_MORALES_*ARELI</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center;">1</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center;">8.89%</td>
+        <td>CASTAÑEDA_VAZQUEZ_*MIREYA</td>
+        <td style="text-align:center;">9</td>
+        <td style="text-align:center;">6</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center; background-color: blue;">20.00%</td>
+        <td style="background-color: blue;">ZAMORA_VARGAS_*AURELIA</td>
+      </tr>
+      <tr id="109-MECA18"><td>109</td>
+        <td>MECA18</td>
+        <td>44</td>
+        <td>57</td>
+        <td style="text-align:center;">25</td>
+        <td style="text-align:center;">1</td>
+        <td style="text-align:center;">24</td>
+        <td style="text-align:center; background-color: red;">56.82%</td>
+        <td style="background-color: red;">MOCTEZUMA_ERASMO_*ABRAHAM</td>
+        <td style="text-align:center;">13</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center;">13</td>
+        <td style="text-align:center; background-color: yellow;">29.55%</td>
+        <td style="background-color: yellow;">VILLEGAS_PORCAYO_*ALICIA</td>
+        <td style="text-align:center;">19</td>
+        <td style="text-align:center;">19</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center; background-color: red;">43.18%</td>
+        <td style="background-color: red;">OLIVARES_HERNANDEZ_*DORA</td>
+        <td style="text-align:center;">6</td>
+        <td style="text-align:center;">6</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center; background-color: blue;">13.64%</td>
+        <td style="background-color: blue;">HERNANDEZ_TORRES_*ESMERALDA</td>
+        <td style="text-align:center;">28</td>
+        <td style="text-align:center;">10</td>
+        <td style="text-align:center;">18</td>
+        <td style="text-align:center; background-color: red;">63.64%</td>
+        <td style="background-color: red;">ARMAS_ROSAS_*CECILIA</td>
+        <td style="text-align:center;">13</td>
+        <td style="text-align:center;">11</td>
+        <td style="text-align:center;">2</td>
+        <td style="text-align:center; background-color: yellow;">29.55%</td>
+        <td style="background-color: yellow;">ZAMORA_VARGAS_*AURELIA</td>
+        <td style="text-align:center;">8</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center; background-color: blue;">18.18%</td>
+        <td style="background-color: blue;">CASTAÑEDA_VAZQUEZ_*MIREYA</td>
+        <td style="text-align:center;">14</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center;">10</td>
+        <td style="text-align:center; background-color: red;">31.82%</td>
+        <td style="background-color: red;">ARMAS_ROSAS_*AZUCENA</td>
+      </tr>
+      <tr id="110-INFO18"><td>110</td>
+        <td>INFO18</td>
+        <td>30</td>
+        <td>35</td>
+        <td style="text-align:center;">8</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center; background-color: yellow;">26.67%</td>
+        <td style="background-color: yellow;">AGUILAR_HERNANDEZ_*JAIME</td>
+        <td style="text-align:center;">11</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center;">11</td>
+        <td style="text-align:center; background-color: red;">36.67%</td>
+        <td style="background-color: red;">VILLEGAS_PORCAYO_*ALICIA</td>
+        <td style="text-align:center;">16</td>
+        <td style="text-align:center;">8</td>
+        <td style="text-align:center;">8</td>
+        <td style="text-align:center; background-color: red;">53.33%</td>
+        <td style="background-color: red;">RIVERA_REYES_*GUADALUPE_ALEJANDRA</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center;">10.00%</td>
+        <td>JUAREZ_SOLIS_*LILIANA</td>
+        <td style="text-align:center;">14</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center;">10</td>
+        <td style="text-align:center; background-color: red;">46.67%</td>
+        <td style="background-color: red;">JUAREZ_SOLIS_*PATRICIA</td>
+        <td style="text-align:center;">7</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center; background-color: yellow;">23.33%</td>
+        <td style="background-color: yellow;">ZAMORA_VARGAS_*AURELIA</td>
+        <td style="text-align:center;">7</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center; background-color: yellow;">23.33%</td>
+        <td style="background-color: yellow;">ZAMORA_VARGAS_*AURELIA</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center;">0.00%</td>
+        <td>CHAVARRIA_MILLAN_*GUADALUPE</td>
+      </tr>
+      <tr id="111-MECA18"><td>111</td>
+        <td>MECA18</td>
+        <td>34</td>
+        <td>34</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center;">0.00%</td>
+        <td>JUAREZ_LOPEZ_*IGNACIO</td>
+        <td style="text-align:center;">9</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center;">9</td>
+        <td style="text-align:center; background-color: yellow;">26.47%</td>
+        <td style="background-color: yellow;">VILLEGAS_PORCAYO_*ALICIA</td>
+        <td style="text-align:center;">23</td>
+        <td style="text-align:center;">16</td>
+        <td style="text-align:center;">7</td>
+        <td style="text-align:center; background-color: red;">67.65%</td>
+        <td style="background-color: red;">RIVERA_REYES_*GUADALUPE_ALEJANDRA</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center;">0.00%</td>
+        <td>JUAREZ_SOLIS_*LILIANA</td>
+        <td style="text-align:center;">7</td>
+        <td style="text-align:center;">2</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center; background-color: yellow;">20.59%</td>
+        <td style="background-color: yellow;">BOBADILLA_MONTIEL_*HECTOR</td>
+        <td style="text-align:center;">6</td>
+        <td style="text-align:center;">4</td>
+        <td style="text-align:center;">2</td>
+        <td style="text-align:center; background-color: blue;">17.65%</td>
+        <td style="background-color: blue;">CASTAÑEDA_VAZQUEZ_*MIREYA</td>
+        <td style="text-align:center;">5</td>
+        <td style="text-align:center;">2</td>
+        <td style="text-align:center;">3</td>
+        <td style="text-align:center; background-color: blue;">14.71%</td>
+        <td style="background-color: blue;">ZAMORA_VARGAS_*AURELIA</td>
+        <td style="text-align:center;">1</td>
+        <td style="text-align:center;">0</td>
+        <td style="text-align:center;">1</td>
+        <td style="text-align:center;">2.94%</td>
+        <td>CHAVARRIA_MILLAN_*GUADALUPE</td>
+      </tr>
+    </table>-->
+    <!--plantel
+    --fecha de emision
+    --Periodo escolar
+    --Concentrado de alumnos no competentes (TITULO)-->
+    <!--<button onclick="canv()">GENERAR</button>-->
+    <script src='../jsPDF-1.3.2/dist/jspdf.debug.js'></script>
+    <script src='../jsPDF-1.3.2/libs/html2pdf.js'></script>
+    <script>
+      function canv(){
+        var pdf = new jsPDF('l', 'pt', 'letter');
+        var canvas = pdf.canvas;
+        //canvas.width = 8.5 * 72;
+        $("#borraconalep").empty();
+        $("#pfdtitulo").empty();
+
+        html2canvas(document.body, {
+            canvas:canvas,
+            onrendered: function(canvas) {
+                //var iframe = document.createElement('iframe');
+                //iframe.setAttribute('style','position:absolute;right:0; top:0; bottom:0; height:100%; width:500px');
+                //document.body.appendChild(iframe);
+                //iframe.src = pdf.output('datauristring');
+                
+               pdf.setFillColor(0,107,84);
+                pdf.circle(80, 60, 30, 'F');
+                pdf.setFillColor(250,250,250);
+                pdf.circle(80, 60, 11, 'F');
+
+                pdf.setDrawColor(255,255,255);
+                pdf.setLineWidth(10);
+                pdf.line(80, 67, 120, 45);
+                pdf.line(40, 77, 80, 54);
+
+                pdf.setDrawColor(0,107,84);
+                pdf.setLineWidth(19);
+                pdf.line(30, 65, 80, 38);
+                pdf.setLineWidth(18);
+                pdf.line(80, 83, 132, 55);
+
+                pdf.setDrawColor(255,255,255);
+                pdf.setLineWidth(19);
+                pdf.line(29, 40, 24, 80);
+                pdf.line(138, 40, 134, 80);
+
+                pdf.setFont("helvetica");
+                pdf.setFontSize(25);
+                pdf.setFontType("bolditalic");
+                pdf.setTextColor(170, 170, 170);
+                pdf.text(31, 112, 'conalep');
+                pdf.setTextColor(0, 107, 84);
+                pdf.text(30, 111, 'conalep');
+                
+                pdf.setFontSize(15);
+                pdf.text(190, 130, 'Reprobación grupo módulo docente');
+
+                var nom_archivo = "Reporte_concentrado.pdf";
+                pdf.save(nom_archivo);
+                $("#encabezado").append("<div class='conalep' id='borraconalep'><img src='../ima/conalep.png' width='100'></div>");
+                $("#encabezado").append("<div class='pfdtitulo' id='pfdtitulo'><b>Concentrado Docentes</b></div>");
+            }
+        });
+      }
+      var bandera = true;
+      var rel = setInterval(relog, 4500);
+      function relog() {
+          if (bandera) {
+            bandera = false;
+            canv();
+          }
+      }
+    </script>
+  </body>
+</html>

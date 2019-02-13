@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Potenciometro</title>
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css" />
+    <link href="../dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css" />
+    <link href="../dist/css/skins/_all-skins.min.css" rel="stylesheet" type="text/css" />
+    <script src="../js/jquery-3.3.1.js"></script>
+    <style type="text/css">
+      .inboxx{
+        background-color: #dd4b39;
+        display: block;
+        width: 60%;
+        margin-bottom: 15px;
+        text-align: center;
+        height: 60px;
+        border-radius: 5px;
+        margin-left: 15%;
+      }
+      .inboxx > b{
+        font-size: 2em;
+      }
+      .inboxx > label{
+        font-size: .8em;
+      }
+    </style>
+    <style type="text/css">
+      .txt-barra{
+        color: white;
+        font-size: 1.3em;
+      }
+    </style>
+  </head>
+  <body class="skin-blue">
+    <div class="wrapper">
+      <!-- Main Header -->
+      <div style="position: absolute; color: white; z-index: 2000; width: 230px; text-align: center;"><h3>Potenciometro</h3></div>
+      <!-- Left side column. contains the logo and sidebar -->
+      <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+          <!-- Sidebar user panel (optional) -->
+          <br>
+          <div class="user-panel">
+            <div class="pull-left image">
+              <img src="../dist/img/usertotal.png" class="img-circle" alt="User Image" />
+            </div>
+            <div class="pull-left info">
+              <p>Usuario</p>
+              <!-- Status -->
+              <a href="#"><i class="fa fa-circle text-success"></i> Usuario General</a>
+            </div>
+          </div>
+          <!-- /.search form -->
+
+          <!-- Sidebar Menu -->
+          <ul class="sidebar-menu">
+            <li class="header">FILTROS</li>
+            <!-- Optionally, you can add icons to the links -->
+            <li class="txt-barra">Entidad</li>
+            <li class="active">
+              <select id="cveentidad" class="form-control" onchange="oc_cveentidad()">
+                <option value='0'>Selecciona</option>
+                <option value="1">Aguascalientes</option>
+                <option value="2">Baja California</option>
+                <option value="3">Baja California Sur</option>
+                <option value="4">Campeche</option>
+                <option value="5">Coahuila de Zaragoza</option>
+                <option value="6">Colima</option>
+                <option value="7">Chiapas</option>
+                <option value="8">Chihuahua</option>
+                <option value="9">Ciudad de México</option>
+                <option value="10">Durango</option>
+                <option value="11">Guanajuato</option>
+                <option value="12">Guerrero</option>
+                <option value="13">Hidalgo</option>
+                <option value="14">Jalisco</option>
+                <option value="15">México</option>
+                <option value="16">Michoacán de Ocampo</option>
+                <option value="17">Morelos</option>
+                <option value="18">Nayarit</option>
+                <option value="19">Nuevo León</option>
+                <option value="20">Oaxaca</option>
+                <option value="21">Puebla</option>
+                <option value="22">Querétaro de Arteaga</option>
+                <option value="23">Quintana Roo</option>
+                <option value="24">San Luis Potosí</option>
+                <option value="25">Sinaloa</option>
+                <option value="26">Sonora</option>
+                <option value="27">Tabasco</option>
+                <option value="28">Tamaulipas</option>
+                <option value="29">Tlaxcala</option>
+                <option value="30">Veracruz Llave</option>
+                <option value="31">Yucatán</option>
+                <option value="32">Zacatecas</option>
+              </select>
+            </li>
+            <li class="txt-barra">Plantel</li>
+            <li>
+              <select id="cveunidadmin" class="form-control">
+                <option value='0'>Selecciona</option>
+              </select>
+            </li>
+            <li class="txt-barra">Modelo Educativo</li>
+            <li>
+              <select id="cvemodeloeducativo" class="form-control" onchange="oc_cvemodeloeducativo()">
+                <option value='0'>Selecciona</option>
+                <option value="2003">2003</option>
+                <option value="2008">2008</option>
+                <option value="2018">2018</option>
+              </select>
+            </li>
+            <li class="txt-barra">Periodo Escolar</li>
+            <li>
+              <select id="periodoescolar" class="form-control">
+                <option value='0'>Selecciona</option>
+              </select>
+            </li>
+            <li class="txt-barra">Carrera</li>
+            <li>
+              <select id="cveplanestudio" class="form-control" onchange="oc_cveplanestudio()">
+                <option value='0'>Selecciona</option>
+              </select>
+            </li>
+            <li class="txt-barra">Grupo</li>
+            <li>
+              <select id="cvegrupo" class="form-control" onchange="oc_cvegrupo()">
+                <option value='0'>Selecciona</option>
+              </select>
+            </li>
+            <li><button onclick="final();">GeneraPDF</button></li>
+          </ul><!-- /.sidebar-menu -->
+        </section>
+        <!-- /.sidebar -->
+      </aside>
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            Sabana de calificaciones
+            <small>Resultados de Búsqueda</small>
+          </h1>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">          
+          <!-- Your Page Content Here -->
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="box">
+                <div class="box-header">
+                  <div id="encabezado">
+                    <div class="row">
+                      <div class="col-md-10">
+                        <h3 class="box-title">Datos del Grupo</h3>
+                        <b><span style='margin-left: 10%'>Grupo: 105-INFO18</span><span style='margin-left: 15%'>Carrera: Profesional Técnico-Bachiller en Informática</span></b>
+                        <table id="tbl_cabeza" class="table table-hover" style="">
+                          <tbody>
+                            <tr>
+                              <th>Módulo</th>
+                              <th>Nombre Módulo</th>
+                              <th>Profesor</th>
+                              <th>C</th><th style="background-color: #fff300;">I</th><th style="background-color: #f94141;">AC</th>
+                              <th>%+Alto</th>
+                              <th>PMPC</th>
+                            </tr>
+                            <tr><td>MAEC05</td><td>Manejo de espacios y cantidades</td><td>GONZALEZ VARA *MARTHA ISELA</td><td>39</td><td>5</td><td>2</td><td>37%</td><td>23%</td></tr>
+                            <tr><td>ININ03</td><td>Interacción inicial en inglés</td><td>FIGUEROA HERNANDEZ *EDITH</td><td>39</td><td>5</td><td>2</td><td>37%</td><td>23%</td></tr>
+                            <tr><td>AMAE04</td><td>Análisis de la materia y la energía</td><td>DAVID REZA *JOEL</td><td>39</td><td>5</td><td>2</td><td>37%</td><td>23%</td></tr>
+                            <tr><td>COIN04</td><td>Comunicación para la interacción social</td><td>AVILA MORALES *ARELI</td><td>39</td><td>5</td><td>2</td><td>37%</td><td>23%</td></tr>
+                            <tr><td>PIPM04</td><td>Procesamiento de información por medios digitales</td><td>PEREZ MARTINEZ *DULCE ANGELICA</td><td>39</td><td>5</td><td>2</td><td>37%</td><td>23%</td></tr>
+                            <tr><td>PROP05</td><td>Proyección personal y profesional</td><td>GALLEGOS MILLAN *AUSTREBERTO</td><td>39</td><td>5</td><td>2</td><td>37%</td><td>23%</td></tr>
+                            <tr><td>REDE04</td><td>Resolución de problemas</td><td>OLIVARES HERNANDEZ *DORA</td><td>39</td><td>5</td><td>2</td><td>37%</td><td>23%</td></tr>
+                            <tr><td>APRE04</td><td>Autogestión del aprendizaje</td><td>ARMAS ROSAS *AZUCENA</td><td>39</td><td>5</td><td>2</td><td>37%</td><td>23%</td></tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="col-md-2" style='margin-top: 2%'>
+                        <div class="row">
+                          <div class="inboxx" style="background-color: grey;"><label>Total Alumnos</label><br><b>46</b></div>
+                        </div>
+                        <div class="row">
+                          <div class="inboxx" style="background-color: #8ad841;"><label>Competentes</label><br><b>32</b></div>
+                        </div>
+                        <div class="row">
+                          <div class="inboxx" style="background-color: #fff300;"><label>Intersemestral</label><br><b>10</b></div>
+                        </div>
+                        <div class="row">
+                          <div class="inboxx" style="background-color: #f94141;"><label>Asesorías Compl.</label><br><b>4</b></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class='row'>
+                      <div class='col-md-12'>
+                        <b><span style='margin-right: 40%; font-size: 1.5em;'>Lista de Grupo</span>
+                        Porcentajes Adquiridos por Módulo</b>
+                      </div>
+                    </div>
+                  </div>
+                </div><!-- /.box-header -->
+                <div class="box-body table-responsive no-padding">
+                  <row>
+                    <table id="datos" class="table table-hover">
+                      <tr>
+                        <td>Matricula</td>
+                        <td>Alumno</td>
+                        <td>Materia1</td>
+                        <td>Materia2</td>
+                        <td>Materia3</td>
+                        <td>Materia4</td>
+                        <td>Materia5</td>
+                        <td>Materia6</td>
+                        <td>Materia7</td>
+                        <td>Materia8</td>
+                      </tr>
+                      <tr id="170170076-5">
+                        <td>170170076-5</td>
+                        <td>LOPEZ_OCHOA_*BRYAN_ALEJANDRO</td>
+                        <td>15.50</td>
+                        <td>23.25</td>
+                        <td style="background-color: red;">9.40</td>
+                        <td>15.00</td>
+                        <td>34.71</td>
+                        <td>52.37</td>
+                        <td style="background-color: red;">.00</td>
+                        <td>23.25</td>
+                      </tr>
+                      <tr id="170170293-6">
+                        <td>170170293-6</td>
+                        <td>VALTIERRA_MANJARREZ_*LESLIE_DENISSE</td>
+                        <td style="background-color: red;">5.00</td>
+                        <td style="background-color: red;">7.50</td>
+                        <td>19.38</td>
+                        <td>15.00</td>
+                        <td style="background-color: red;">.00</td>
+                        <td>46.55</td>
+                        <td>20.28</td>
+                        <td>30.00</td>
+                      </tr>
+                      <tr id="170170375-1">
+                        <td>170170375-1</td>
+                        <td>ACEVEDO_MARRUFO_*KARLA_JHARET</td>
+                        <td>20.00</td>
+                        <td>23.25</td>
+                        <td style="background-color: red;">.00</td>
+                        <td>15.00</td>
+                        <td style="background-color: yellow;">12.41</td>
+                        <td>59.83</td>
+                        <td style="background-color: red;">.00</td>
+                        <td>23.25</td>
+                      </tr>
+                      <tr id="170170505-3">
+                        <td>170170505-3</td>
+                        <td>RAMIREZ_HERRERA_*JOSE_RODOLFO</td>
+                        <td style="background-color: red;">5.00</td>
+                        <td>23.25</td>
+                        <td>19.38</td>
+                        <td style="background-color: yellow;">13.88</td>
+                        <td>47.33</td>
+                        <td style="background-color: red;">2.50</td>
+                        <td style="background-color: red;">6.20</td>
+                        <td>30.00</td>
+                      </tr>
+                      <tr id="180170010-3">
+                        <td>180170010-3</td>
+                        <td>SANCHEZ_ESPINOZA_*JESUS_ALFREDO</td>
+                        <td>20.00</td>
+                        <td>23.25</td>
+                        <td>25.00</td>
+                        <td style="background-color: yellow;">11.63</td>
+                        <td>46.88</td>
+                        <td>57.77</td>
+                        <td>21.85</td>
+                        <td>23.25</td>
+                      </tr>
+                      <tr id="180170012-9">
+                        <td>180170012-9</td>
+                        <td>ROBLES_GARCIA_*CARLOS_JESUS</td>
+                        <td style="background-color: yellow;">11.55</td>
+                        <td>30.00</td>
+                        <td>19.38</td>
+                        <td style="background-color: yellow;">13.88</td>
+                        <td>44.18</td>
+                        <td>64.10</td>
+                        <td>22.30</td>
+                        <td>30.00</td>
+                      </tr>
+                      <tr id="180170014-5">
+                        <td>180170014-5</td>
+                        <td>ALVARO_ALVARO_*LUIS_FERNANDO</td>
+                        <td style="background-color: yellow;">10.25</td>
+                        <td>30.00</td>
+                        <td>25.00</td>
+                        <td style="background-color: yellow;">11.63</td>
+                        <td>21.49</td>
+                        <td>60.73</td>
+                        <td>20.95</td>
+                        <td>23.25</td>
+                      </tr>
+                      <tr id="180170021-0">
+                        <td>180170021-0</td>
+                        <td>RODRIGUEZ_CRUZ_*REY_DAVID</td>
+                        <td>15.43</td>
+                        <td>23.25</td>
+                        <td>19.38</td>
+                        <td style="background-color: yellow;">13.88</td>
+                        <td>39.38</td>
+                        <td>62.82</td>
+                        <td>21.18</td>
+                        <td>30.00</td>
+                      </tr>
+                      <tr id="180170023-6">
+                        <td>180170023-6</td>
+                        <td>COTA_CALDERON_*VANESSA</td>
+                        <td>15.43</td>
+                        <td>30.00</td>
+                        <td>25.00</td>
+                        <td style="background-color: yellow;">12.08</td>
+                        <td>34.48</td>
+                        <td>58.25</td>
+                        <td>21.85</td>
+                        <td>23.25</td>
+                      </tr>
+                      <tr id="180170034-3">
+                        <td>180170034-3</td>
+                        <td>LOPEZ_CANO_*PAULINA_ANDREA</td>
+                        <td style="background-color: red;">5.00</td>
+                        <td>30.00</td>
+                        <td style="background-color: red;">9.40</td>
+                        <td style="background-color: yellow;">11.63</td>
+                        <td>36.11</td>
+                        <td>55.78</td>
+                        <td>19.38</td>
+                        <td>23.25</td>
+                      </tr>
+                      <tr id="180170041-8">
+                        <td>180170041-8</td>
+                        <td>PALOMARES_CERVANTES_*OSCAR_RAUL</td>
+                        <td>15.43</td>
+                        <td>23.25</td>
+                        <td style="background-color: red;">9.40</td>
+                        <td>15.00</td>
+                        <td>18.09</td>
+                        <td style="background-color: yellow;">11.75</td>
+                        <td>18.81</td>
+                        <td>30.00</td>
+                      </tr>
+                      <tr id="180170043-4">
+                        <td>180170043-4</td>
+                        <td>BARRIOS_VAZQUEZ_*ANA_GABRIELA</td>
+                        <td style="background-color: red;">5.00</td>
+                        <td>23.25</td>
+                        <td>19.38</td>
+                        <td style="background-color: yellow;">14.21</td>
+                        <td>41.10</td>
+                        <td>59.38</td>
+                        <td style="background-color: yellow;">12.30</td>
+                        <td>23.25</td>
+                      </tr>
+                      <tr id="180170059-0">
+                        <td>180170059-0</td>
+                        <td>CANCIO_MOYA_*JAVIER</td>
+                        <td>15.50</td>
+                        <td>23.25</td>
+                        <td>19.38</td>
+                        <td style="background-color: yellow;">11.63</td>
+                        <td>47.33</td>
+                        <td>39.35</td>
+                        <td>22.30</td>
+                        <td>23.25</td>
+                      </tr>
+                      <tr id="180170063-2">
+                        <td>180170063-2</td>
+                        <td>CHAVEZ_HERRERA_*ALEJANDRO</td>
+                        <td>20.00</td>
+                        <td>23.25</td>
+                        <td>25.00</td>
+                        <td style="background-color: yellow;">11.63</td>
+                        <td>45.02</td>
+                        <td>58.03</td>
+                        <td>25.00</td>
+                        <td>23.25</td>
+                      </tr>
+                      <tr id="180170071-5">
+                        <td>180170071-5</td>
+                        <td>AMARILLAS_CARDIEL_*IVAN_ALFREDO</td>
+                        <td>15.50</td>
+                        <td>30.00</td>
+                        <td>25.00</td>
+                        <td style="background-color: yellow;">13.88</td>
+                        <td>32.48</td>
+                        <td>64.10</td>
+                        <td>22.75</td>
+                        <td>30.00</td>
+                      </tr>
+                      <tr id="180170080-6">
+                        <td>180170080-6</td>
+                        <td>AQUINO_RIVERA_*FERNADO_ANGEL</td>
+                        <td style="background-color: yellow;">10.25</td>
+                        <td>23.25</td>
+                        <td style="background-color: red;">9.40</td>
+                        <td style="background-color: yellow;">11.63</td>
+                        <td style="background-color: yellow;">10.59</td>
+                        <td>54.17</td>
+                        <td style="background-color: red;">7.75</td>
+                        <td>30.00</td>
+                      </tr>
+                      <tr id="180170091-3">
+                        <td>180170091-3</td>
+                        <td>ZEPEDA_SALDAÑA_*SERGIO_EDUARDO</td>
+                        <td style="background-color: red;">5.00</td>
+                        <td>23.25</td>
+                        <td>25.00</td>
+                        <td style="background-color: yellow;">13.88</td>
+                        <td>33.54</td>
+                        <td>50.36</td>
+                        <td style="background-color: red;">.00</td>
+                        <td>23.25</td>
+                      </tr>
+                      <tr id="180170126-7">
+                        <td>180170126-7</td>
+                        <td>GURROLA_LOPEZ_*JOSE_GUADALUPE</td>
+                        <td>20.00</td>
+                        <td>23.25</td>
+                        <td>19.38</td>
+                        <td style="background-color: yellow;">11.85</td>
+                        <td>31.46</td>
+                        <td>41.98</td>
+                        <td>22.30</td>
+                        <td>23.25</td>
+                      </tr>
+                      <tr id="180170134-1">
+                        <td>180170134-1</td>
+                        <td>HURTADO_CARRILLO_*EVELYN_SUJEY</td>
+                        <td style="background-color: red;">5.00</td>
+                        <td>23.25</td>
+                        <td style="background-color: yellow;">13.86</td>
+                        <td style="background-color: yellow;">12.19</td>
+                        <td>32.26</td>
+                        <td>58.59</td>
+                        <td>23.20</td>
+                        <td>30.00</td>
+                      </tr>
+                      <tr id="180170143-2">
+                        <td>180170143-2</td>
+                        <td>SANCHEZ_SILVA_*JESUS_ISMAEL</td>
+                        <td style="background-color: red;">5.00</td>
+                        <td>30.00</td>
+                        <td style="background-color: yellow;">13.86</td>
+                        <td style="background-color: yellow;">11.63</td>
+                        <td style="background-color: yellow;">10.59</td>
+                        <td>53.91</td>
+                        <td style="background-color: red;">7.75</td>
+                        <td>30.00</td>
+                      </tr>
+                      <tr id="180170151-5">
+                        <td>180170151-5</td>
+                        <td>PEREZ_RAMIREZ_*SAMUEL</td>
+                        <td>15.50</td>
+                        <td>23.25</td>
+                        <td>19.38</td>
+                        <td style="background-color: yellow;">11.63</td>
+                        <td>45.64</td>
+                        <td>50.12</td>
+                        <td style="background-color: red;">.00</td>
+                        <td>30.00</td>
+                      </tr>
+                      <tr id="180170153-1">
+                        <td>180170153-1</td>
+                        <td>FERNANDEZ_OCAMPO_*MARIANA</td>
+                        <td style="background-color: yellow;">14.45</td>
+                        <td>23.25</td>
+                        <td>19.38</td>
+                        <td style="background-color: yellow;">13.88</td>
+                        <td>45.98</td>
+                        <td>42.65</td>
+                        <td>21.85</td>
+                        <td>30.00</td>
+                      </tr>
+                      <tr id="180170156-4">
+                        <td>180170156-4</td>
+                        <td>MIRANDA_LOPEZ_*ARATH</td>
+                        <td>20.00</td>
+                        <td>30.00</td>
+                        <td style="background-color: red;">9.40</td>
+                        <td style="background-color: yellow;">12.41</td>
+                        <td>32.08</td>
+                        <td>63.09</td>
+                        <td>23.65</td>
+                        <td>30.00</td>
+                      </tr>
+                      <tr id="180170161-4">
+                        <td>180170161-4</td>
+                        <td>CASTRO_MACIAS_*DANA_JAED</td>
+                        <td style="background-color: red;">5.00</td>
+                        <td>30.00</td>
+                        <td>19.38</td>
+                        <td style="background-color: yellow;">13.88</td>
+                        <td>38.44</td>
+                        <td>57.43</td>
+                        <td>21.18</td>
+                        <td>23.25</td>
+                      </tr>
+                      <tr id="180170169-7">
+                        <td>180170169-7</td>
+                        <td>VALENZUELA_GARCIA_*ABEL_ARMANDO</td>
+                        <td style="background-color: red;">5.00</td>
+                        <td>23.25</td>
+                        <td>19.38</td>
+                        <td style="background-color: yellow;">11.63</td>
+                        <td>44.55</td>
+                        <td>58.14</td>
+                        <td>20.05</td>
+                        <td>23.25</td>
+                      </tr>
+                      <tr id="180170187-9">
+                        <td>180170187-9</td>
+                        <td>MORENO_MONTOYA_*DULCE_DANIELA</td>
+                        <td>20.00</td>
+                        <td>30.00</td>
+                        <td style="background-color: red;">9.40</td>
+                        <td style="background-color: yellow;">12.08</td>
+                        <td>18.04</td>
+                        <td>57.92</td>
+                        <td>21.63</td>
+                        <td>30.00</td>
+                      </tr>
+                      <tr id="180170195-2">
+                        <td>180170195-2</td>
+                        <td>GARCIA_RODRIGUEZ_*JUAN_MANUEL</td>
+                        <td>15.43</td>
+                        <td>30.00</td>
+                        <td>19.38</td>
+                        <td style="background-color: yellow;">11.96</td>
+                        <td>33.43</td>
+                        <td>57.65</td>
+                        <td style="background-color: red;">.00</td>
+                        <td>23.25</td>
+                      </tr>
+                      <tr id="180170198-6">
+                        <td>180170198-6</td>
+                        <td>BARAJAS_COTA_*DAYANARA_YARETSY</td>
+                        <td>15.50</td>
+                        <td>23.25</td>
+                        <td>19.38</td>
+                        <td style="background-color: yellow;">14.55</td>
+                        <td>37.43</td>
+                        <td>54.46</td>
+                        <td>20.05</td>
+                        <td>30.00</td>
+                      </tr>
+                      <tr id="180170228-1">
+                        <td>180170228-1</td>
+                        <td>FLORES_ONTIVEROS_*JUAN_RAMON</td>
+                        <td>20.00</td>
+                        <td>23.25</td>
+                        <td style="background-color: red;">9.40</td>
+                        <td style="background-color: yellow;">11.63</td>
+                        <td style="background-color: yellow;">10.59</td>
+                        <td>58.59</td>
+                        <td>21.85</td>
+                        <td>23.25</td>
+                      </tr>
+                      <tr id="180170238-0">
+                        <td>180170238-0</td>
+                        <td>MARTINEZ_GONZALEZ_*YAHAIRA_INEZ</td>
+                        <td style="background-color: red;">5.00</td>
+                        <td>30.00</td>
+                        <td>19.38</td>
+                        <td>15.00</td>
+                        <td>37.20</td>
+                        <td>53.05</td>
+                        <td style="background-color: red;">.00</td>
+                        <td>30.00</td>
+                      </tr>
+                      <tr id="180170243-0">
+                        <td>180170243-0</td>
+                        <td>GARCIA_RODRIGUEZ_*IRVIN_JESUS</td>
+                        <td>20.00</td>
+                        <td>23.25</td>
+                        <td style="background-color: red;">9.40</td>
+                        <td style="background-color: yellow;">11.63</td>
+                        <td style="background-color: yellow;">10.59</td>
+                        <td>24.59</td>
+                        <td>21.85</td>
+                        <td>23.25</td>
+                      </tr>
+                      <tr id="180170246-3">
+                        <td>180170246-3</td>
+                        <td>RAMOS_POXTAN_*LEONARDO_JOAQUIN</td>
+                        <td>15.43</td>
+                        <td>30.00</td>
+                        <td style="background-color: red;">6.64</td>
+                        <td style="background-color: yellow;">11.63</td>
+                        <td>47.33</td>
+                        <td>64.10</td>
+                        <td>19.83</td>
+                        <td>23.25</td>
+                      </tr>
+                      <tr id="180170257-0">
+                        <td>180170257-0</td>
+                        <td>VILLEGAS_LOPEZ_*BRANDON</td>
+                        <td>20.00</td>
+                        <td>30.00</td>
+                        <td>25.00</td>
+                        <td style="background-color: yellow;">11.63</td>
+                        <td style="background-color: yellow;">10.59</td>
+                        <td>56.91</td>
+                        <td>22.75</td>
+                        <td>23.25</td>
+                      </tr>
+                      <tr id="180170272-9">
+                        <td>180170272-9</td>
+                        <td>CAICEROS_FLORES_*ADAN_JOSUE</td>
+                        <td style="background-color: red;">5.00</td>
+                        <td>23.25</td>
+                        <td style="background-color: red;">9.40</td>
+                        <td style="background-color: yellow;">11.63</td>
+                        <td>32.26</td>
+                        <td>63.20</td>
+                        <td>19.83</td>
+                        <td>23.25</td>
+                      </tr>
+                      <tr id="180170281-0">
+                        <td>180170281-0</td>
+                        <td>VAZQUEZ_CRUZ_*ALEJANDRO</td>
+                        <td style="background-color: red;">5.00</td>
+                        <td>23.25</td>
+                        <td>19.38</td>
+                        <td style="background-color: yellow;">13.88</td>
+                        <td style="background-color: yellow;">11.63</td>
+                        <td>50.16</td>
+                        <td>18.81</td>
+                        <td>30.00</td>
+                      </tr>
+                      <tr id="180170287-7">
+                        <td>180170287-7</td>
+                        <td>LOPEZ_CASTRO_*GUADALUPE_DE_JESUS</td>
+                        <td>15.50</td>
+                        <td>30.00</td>
+                        <td style="background-color: red;">7.43</td>
+                        <td style="background-color: yellow;">13.88</td>
+                        <td style="background-color: red;">9.94</td>
+                        <td>52.33</td>
+                        <td>20.73</td>
+                        <td>30.00</td>
+                      </tr>
+                      <tr id="180170378-4">
+                        <td>180170378-4</td>
+                        <td>GUTIERREZ_CHAVEZ_*DAVID</td>
+                        <td style="background-color: red;">5.00</td>
+                        <td>23.25</td>
+                        <td>19.38</td>
+                        <td style="background-color: yellow;">13.76</td>
+                        <td>28.31</td>
+                        <td>60.73</td>
+                        <td>19.83</td>
+                        <td>30.00</td>
+                      </tr>
+                      <tr id="180170429-5">
+                        <td>180170429-5</td>
+                        <td>SANTIAGO_JAIMES_*JADIEL</td>
+                        <td style="background-color: red;">5.00</td>
+                        <td style="background-color: red;">7.50</td>
+                        <td style="background-color: red;">9.40</td>
+                        <td>15.00</td>
+                        <td>35.10</td>
+                        <td>29.98</td>
+                        <td>22.08</td>
+                        <td>23.25</td>
+                      </tr>
+                      <tr id="180170441-0">
+                        <td>180170441-0</td>
+                        <td>OSUNA_CORDERO_*RAQUEL</td>
+                        <td style="background-color: yellow;">12.88</td>
+                        <td>23.25</td>
+                        <td>25.00</td>
+                        <td style="background-color: yellow;">13.88</td>
+                        <td>45.86</td>
+                        <td>50.27</td>
+                        <td>19.43</td>
+                        <td>30.00</td>
+                      </tr>
+                      <tr id="180170447-7">
+                        <td>180170447-7</td>
+                        <td>NUÑEZ_SANCHEZ_*KEVIN_ALAN</td>
+                        <td>15.43</td>
+                        <td>30.00</td>
+                        <td>19.38</td>
+                        <td style="background-color: yellow;">13.88</td>
+                        <td>46.76</td>
+                        <td>51.55</td>
+                        <td>21.63</td>
+                        <td>30.00</td>
+                      </tr>
+                      <tr id="180170474-1">
+                        <td>180170474-1</td>
+                        <td>BEJARANO_AUDEVEZ_*JOVANI</td>
+                        <td style="background-color: yellow;">13.75</td>
+                        <td>30.00</td>
+                        <td>25.00</td>
+                        <td style="background-color: yellow;">11.85</td>
+                        <td>17.91</td>
+                        <td>54.69</td>
+                        <td>25.00</td>
+                        <td>23.25</td>
+                      </tr>
+                      <tr id="180170475-8">
+                        <td>180170475-8</td>
+                        <td>ACEVEDO_SANTOYO_*JOSE_PABLO</td>
+                        <td>15.50</td>
+                        <td>30.00</td>
+                        <td>21.80</td>
+                        <td style="background-color: yellow;">13.88</td>
+                        <td style="background-color: yellow;">10.59</td>
+                        <td>53.53</td>
+                        <td style="background-color: red;">8.20</td>
+                        <td>23.25</td>
+                      </tr>
+                      <tr id="180170502-9">
+                        <td>180170502-9</td>
+                        <td>RODRIGUEZ_ZUÑIGA_*KARINA</td>
+                        <td style="background-color: red;">5.00</td>
+                        <td>23.25</td>
+                        <td>19.38</td>
+                        <td>n/c</td>
+                        <td style="background-color: yellow;">10.59</td>
+                        <td>55.10</td>
+                        <td>20.73</td>
+                        <td>n/c</td>
+                      </tr>
+                      <tr id="180170507-8">
+                        <td>180170507-8</td>
+                        <td>MORENO_CARDENAS_*DAVID_ENRIQUE</td>
+                        <td style="background-color: yellow;">12.88</td>
+                        <td>23.25</td>
+                        <td>19.38</td>
+                        <td>n/c</td>
+                        <td>40.84</td>
+                        <td>51.10</td>
+                        <td>19.38</td>
+                        <td>n/c</td>
+                      </tr>
+                      <tr id="180170521-9">
+                        <td>180170521-9</td>
+                        <td>SOLANO_MARTINEZ_*JOSEPH_ROBERTO</td>
+                        <td>15.50</td>
+                        <td>23.25</td>
+                        <td>19.38</td>
+                        <td>n/c</td>
+                        <td>n/c</td>
+                        <td>59.83</td>
+                        <td>22.75</td>
+                        <td>n/c</td>
+                      </tr>
+                      <tr id="180170553-2">
+                        <td>180170553-2</td>
+                        <td>ACOSTA_SALAZAR_*OSCAR_ANTONIO</td>
+                        <td>n/c</td>
+                        <td>30.00</td>
+                        <td>n/c</td>
+                        <td>n/c</td>
+                        <td>n/c</td>
+                        <td>60.28</td>
+                        <td>n/c</td>
+                        <td>n/c</td>
+                      </tr>
+
+                    </table>
+                  </row>
+                </div><!-- /.box-body -->
+              </div><!-- /.box -->
+            </div>
+          </div>
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+
+      <!-- Main Footer -->
+
+    </div><!-- ./wrapper -->
+
+    <!-- REQUIRED JS SCRIPTS -->
+    
+    <!-- jQuery 2.1.3 -->
+    <script src="../plugins/jQuery/jQuery-2.1.3.min.js"></script>
+    <!-- FastClick -->
+    <script src='../plugins/fastclick/fastclick.min.js'></script>
+    <!-- AdminLTE App -->
+    <script src="../dist/js/app.min.js" type="text/javascript"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="../dist/js/demo.js" type="text/javascript"></script>
+  </body>
+</html>

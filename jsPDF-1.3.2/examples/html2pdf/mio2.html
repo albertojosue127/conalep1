@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+<html>
+<head>
+	<title>display/box/float/clear test</title>
+	<link rel="stylesheet" type="text/css" href="bootstrap.css" />
+	
+</head>
+<body>
+	<table class="table" style="width: 600px" id="tabla">
+ 		<tr>
+ 			<th>NOMBRE</th>
+ 			<th>EDAD</th>
+ 			<th>CUMPLE</th>
+ 		</tr>
+ 		<tr>
+ 			<td>NOMBRE1</td>
+ 			<td>EDAD1</td>
+ 			<td>CUMPLE1</td>
+ 		</tr>
+ 		<tr>
+ 			<td>NOMBRE2</td>
+ 			<td>EDAD2</td>
+ 			<td>CUMPLE2</td>
+ 		</tr>
+ 		<tr>
+ 			<td>NOMBRE3</td>
+ 			<td>EDAD3</td>
+ 			<td>CUMPLE3</td>
+ 		</tr>
+ 		<tr>
+ 			<td>NOMBRE4</td>
+ 			<td>EDAD4</td>
+ 			<td>CUMPLE4</td>
+ 		</tr>
+ 	</table>
+ 	<script src='../../dist/jspdf.debug.js'></script>
+	<script src='../../libs/html2pdf.js'></script>
+	<script src="jquery-3.3.1.js"></script>
+  	<script>
+  		var getUrlParameter = function getUrlParameter(sParam) {
+                var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                    sURLVariables = sPageURL.split('&'),
+                    sParameterName,
+                    i;
+
+                for (i = 0; i < sURLVariables.length; i++) {
+                    sParameterName = sURLVariables[i].split('=');
+                    if (sParameterName[0] === sParam) {
+                        return sParameterName[1] === undefined ? true : sParameterName[1];
+                    }
+                }
+            };
+        //alert(getUrlParameter("datos"));
+
+	    var pdf = new jsPDF('l', 'pt', 'letter');
+	    var canvas = pdf.canvas;
+	    //canvas.width = 8.5 * 72;
+	    html2canvas($("#tabla").first(), {
+	        canvas:canvas,
+	        onrendered: function(canvas) {
+	            //var iframe = document.createElement('iframe');
+	            //iframe.setAttribute('style','position:absolute;right:0; top:0; bottom:0; height:100%; width:500px');
+	            //document.body.appendChild(iframe);
+	            //iframe.src = pdf.output('datauristring');
+	            pdf.save('imagenes.pdf');
+	            //cerrar();
+	        }
+	    });
+	    function cerrar(){
+	   		window.close();
+	    }
+    </script>
+</body>
+</html>

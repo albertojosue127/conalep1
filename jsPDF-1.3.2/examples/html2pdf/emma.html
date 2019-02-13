@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title>emma</title>
+	<script src="jquery-3.3.1.js"></script>
+	<script type="text/javascript" src="jspdf.min.js"></script>
+	<script type="text/javascript">
+		var imgdat = "";
+		function canvass(){
+			if (!HTMLCanvasElement.prototype.toBlob) {
+			   Object.defineProperty(HTMLCanvasElement.prototype, 'toBlob', {
+			     value: function (callback, type, quality) {
+			       var canvas = this;
+			       setTimeout(function() {
+			         var binStr = atob( canvas.toDataURL(type, quality).split(',')[1] ),
+			         len = binStr.length,
+			         arr = new Uint8Array(len);
+
+			         for (var i = 0; i < len; i++ ) {
+			            arr[i] = binStr.charCodeAt(i);
+			         }
+
+			         callback( new Blob( [arr], {type: type || 'image/png'} ) );
+			       });
+			     }
+			  });
+			}
+
+			var canvas = document.getElementById('canvas');
+			var ctx = canvas.getContext('2d');
+
+			var data = '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400">' +
+			           '<foreignObject width="100%" height="100%">' +
+			           '<style type="text/css">'+
+			           		'div{background-color: green; width: 600px; height: 400px;}'+
+			           		'div {'+
+							  'margin: 0;'+
+							  'font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";'+
+							  'font-size: 1rem;'+
+							  'font-weight: 400;'+
+							  'line-height: 1.5;'+
+							  'color: #212529;'+
+							  'text-align: left;'+
+							  'background-color: #fff;'+
+							'}'+
+							'.table {'+
+							  'width: 100%;'+
+							  'margin-bottom: 1rem;'+
+							  'background-color: transparent;'+
+							'}'+
+							''+
+							'.table th,'+
+							'.table td {'+
+							  'padding: 0.75rem;'+
+							  'vertical-align: top;'+
+							  'border-top: 1px solid #dee2e6;'+
+							'}'+
+							''+	
+							'.table thead th {'+
+							  'vertical-align: bottom;'+
+							  'border-bottom: 2px solid #dee2e6;'+
+							'}'+
+							''+
+							'.table tbody + tbody {'+
+							  'border-top: 2px solid #dee2e6;'+
+							'}'+
+							''+
+							'.table .table {'+
+							  'background-color: #fff;'+
+							'}'+
+							'.table {'+
+							    'border-collapse: collapse !important;'+
+							  '}'+
+							  '.table td,'+
+							  '.table th {'+
+							    'background-color: #fff !important;'+
+							  '}'+
+			           		''+
+			           		''+
+			           '</style>'+
+			           '<div xmlns="http://www.w3.org/1999/xhtml">' +
+			           '<table class="table">'+$("#tabla").html()+'</table>'+
+			           '</div>' +
+			           '</foreignObject>' +
+			           '</svg>';
+			    
+			 data = encodeURIComponent(data);
+			
+			var img = new Image();
+			img.onload = function() {
+			  ctx.drawImage(img, 0, 0);
+			  //console.log(canvas.toDataURL());
+			 	imgdat = canvas.toDataURL();
+			  canvas.toBlob(function(blob) {
+			     var newImg = document.createElement('img'),
+			     url = URL.createObjectURL(blob);
+
+			     newImg.onload = function() {
+			     // no longer need to read the blob so it's revoked
+			     URL.revokeObjectURL(url);
+			   };
+
+			   newImg.src = url;
+			   //document.body.appendChild(newImg);
+			 });
+			}
+			img.src = "data:image/svg+xml," + data;
+		};
+		function final(){
+			var doc = new jsPDF('l', 'pt', 'letter');
+			doc.setFontSize(40);
+			doc.text(35, 25, "Octonyan loves jsPDF");
+			doc.addImage(imgdat, 'JPEG', 15, 40, 800, 600);
+
+			doc.save('imagenes.pdf');
+			//doc.autoPrint();
+		};
+	</script>
+	<style type="text/css">
+		body {
+		  margin: 0;
+		  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+		  font-size: 1rem;
+		  font-weight: 400;
+		  line-height: 1.5;
+		  color: #212529;
+		  text-align: left;
+		  background-color: #fff;
+		}
+		.table {
+		  width: 100%;
+		  margin-bottom: 1rem;
+		  background-color: transparent;
+		}
+
+		.table th,
+		.table td {
+		  padding: 0.75rem;
+		  vertical-align: top;
+		  border-top: 1px solid #dee2e6;
+		}
+
+		.table thead th {
+		  vertical-align: bottom;
+		  border-bottom: 2px solid #dee2e6;
+		}
+
+		.table tbody + tbody {
+		  border-top: 2px solid #dee2e6;
+		}
+
+		.table .table {
+		  background-color: #fff;
+		}
+		.table {
+		    border-collapse: collapse !important;
+		  }
+		  .table td,
+		  .table th {
+		    background-color: #fff !important;
+		  }
+	</style>
+</head>
+<body>
+	<button onclick="canvass()">canvas</button>
+	<br>
+	<canvas id="canvas" hidden="" style="border:2px solid black;" width="600" height="400"></canvas>
+	<button type="button" class="btn btn-primary" onclick="final()">FINAL</button>
+	<table class="table" style="width: 600px" id="tabla">
+ 		<tr>
+ 			<th>NOMBRE12</th>
+ 			<th>EDAD</th>
+ 			<th>CUMPLE</th>
+ 		</tr>
+ 		<tr>
+ 			<td>NOMBRE1</td>
+ 			<td>EDAD1</td>
+ 			<td>CUMPLE1</td>
+ 		</tr>
+ 		<tr>
+ 			<td>NOMBRE2</td>
+ 			<td>EDAD2</td>
+ 			<td>CUMPLE2</td>
+ 		</tr>
+ 		<tr>
+ 			<td>NOMBRE3</td>
+ 			<td>EDAD3</td>
+ 			<td>CUMPLE3</td>
+ 		</tr>
+ 		<tr>
+ 			<td>NOMBRE4</td>
+ 			<td>EDAD4</td>
+ 			<td>CUMPLE4</td>
+ 		</tr>
+ 	</table>
+ 	<hr>
+</body>
+</html>

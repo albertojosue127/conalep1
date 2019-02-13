@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+<html>
+<head>
+<title>display/box/float/clear test</title>
+<link rel="stylesheet" type="text/css" href="bootstrap.css" />
+</head>
+<body>
+	<div style="width: 100px; height: 100px; background-color: red;"></div>
+	<div style="width: 100px; height: 100px; background-color: green;"></div>
+	<!--<img src="2.png" width="100">-->
+	<!--<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAM0AAADNCAMAAAAsYgRbAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABJQTFRF3NSmzMewPxIG//ncJEJsldTou1jHgAAAARBJREFUeNrs2EEKgCAQBVDLuv+V20dENbMY831wKz4Y/VHb/5RGQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0PzMWtyaGhoaGhoaGhoaGhoaGhoxtb0QGhoaGhoaGhoaGhoaGhoaMbRLEvv50VTQ9OTQ5OpyZ01GpM2g0bfmDQaL7S+ofFC6xv3ZpxJiywakzbvd9r3RWPS9I2+MWk0+kbf0Hih9Y17U0nTHibrDDQ0NDQ0NDQ0NDQ0NDQ0NTXbRSL/AK72o6GhoaGhoRlL8951vwsNDQ0NDQ1NDc0WyHtDTEhDQ0NDQ0NTS5MdGhoaGhoaGhoaGhoaGhoaGhoaGhoaGposzSHAAErMwwQ2HwRQAAAAAElFTkSuQmCC">-->
+	<table class="table" style="width: 600px" id="tabla">
+ 		<tr>
+ 			<th>NOMBRE</th>
+ 			<th>EDAD</th>
+ 			<th>CUMPLE</th>
+ 		</tr>
+ 		<tr>
+ 			<td>NOMBRE1</td>
+ 			<td>EDAD1</td>
+ 			<td>CUMPLE1</td>
+ 		</tr>
+ 		<tr>
+ 			<td>NOMBRE2</td>
+ 			<td>EDAD2</td>
+ 			<td>CUMPLE2</td>
+ 		</tr>
+ 		<tr>
+ 			<td>NOMBRE3</td>
+ 			<td>EDAD3</td>
+ 			<td>CUMPLE3</td>
+ 		</tr>
+ 		<tr>
+ 			<td>NOMBRE4</td>
+ 			<td>EDAD4</td>
+ 			<td>CUMPLE4</td>
+ 		</tr>
+ 	</table>
+ 	<!--LA OPCION SERIA ENVIAR LOS DATOS A UNA PESTAÑA NUEVA Y EJECUTAR UNA CONSULTA NUEVA QUE GENERA LA LA TABLA Y DEPUES YA EXPORTAR A PDF (que salga solita la tabla sin espacios vacios)-->
+ 	<a type="button" class="btn btn-primary" href="mio2.html?datos=enviar_todos_los_datos_para_una_nueva_consulta">NUEVA</a>
+ 	<button type="button" class="btn btn-primary" onclick="final()">FINAL</button>
+	<script src='../../dist/jspdf.debug.js'></script>
+	<script src='../../libs/html2pdf.js'></script>
+	<script src="jquery-3.3.1.js"></script>
+  	<script>
+	    var pdf = new jsPDF('l', 'pt', 'letter');
+	    var canvas = pdf.canvas;
+
+	    //canvas.width = 8.5 * 72;
+	    //DEJA ESPACIOS VACIOS EN TODO EL DOCUMENTO... 
+	    html2canvas($("#tabla").first(), {
+	        canvas:canvas,
+	        onrendered: function(canvas) {
+	            var iframe = document.createElement('iframe');
+	            iframe.setAttribute('style','position:absolute;right:0; top:0; bottom:0; height:100%; width:500px');
+	            document.body.appendChild(iframe);
+	            iframe.src = pdf.output('datauristring');
+	            //pdf.save('imagenes.pdf');
+	        }
+	    });
+	    function final(){
+	    	//NO SE PUEDE ABRIR UNA VENTANA CON LA TABLA Y MANDARLA GUARDAR EN PDF POR EN EL ESCRIP DE "WINDOW.OPEN" NO ES POSIBLE EJECUTAR UN <SCRIPT>
+	    	//alert($("#tabla").html());
+	    	var myWindow = window.open("mio2.html?datos=enviar_todos_los_datos_para_una_nueva_consulta", "Servicio", "width=700, height=500");
+
+		    /*var pdf = new jsPDF('l', 'pt', 'letter');
+		    var canvas = pdf.canvas;
+		    canvas.width = 8.5 * 72;
+		    html2canvas($("#tabla").first(), {
+		        canvas:canvas,
+		        onrendered: function(canvas) {
+		            pdf.save('imagenes.pdf');
+		        }
+		    });*/
+	    }
+    </script>
+</body>
+</html>

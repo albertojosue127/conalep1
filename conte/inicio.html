@@ -884,6 +884,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <option value='0'>Selecciona</option>
               </select>
             </li>
+            <li class="txt-barra">Semestre</li>
+            <li>
+              <select id="semestre" class="form-control" onchange="oc_semestre()">
+                <option value='0'>Selecciona</option>
+              </select>
+            </li>
+            <br>
             <br>
             <li><button class="btn btn-block btn-info btn-lg" onclick="descargar_dd();">RC Docente</button></li>
             <br>
@@ -893,23 +900,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <br>
             <li><button class="btn btn-block btn-info btn-lg" onclick="pdf_detalle_matricula();">Alumno</button></li>
             <br>
-            <!--<li><button  class="btn btn-block btn-info btn-lg" onclick='alumno_mp()'>alumno_mp</button></li>
+            <li><button  class="btn btn-block btn-info btn-lg" onclick='alumno_mp()'>alumno_mp</button></li>
             <br>
             <li><button  class="btn btn-block btn-info btn-lg" onclick='pdf_mpnc()'>pdf_mpnc</button></li>
             <br>
             <li><button class="btn btn-block btn-danger btn-lg" onclick="pdf_concentrado_nc();">R-GM Docente</button></li>
             <br>
             <li><button class="btn btn-block btn-danger btn-lg" onclick="pdf_concentrado_p();">Alumnos C, NC</button></li>
-            <br>-->
-            <!--<br>
-            <hr>
             <br>
-            <li>
-              <select id="semestre" class="form-control" onchange="oc_semestre()">
-                <option value='0'>Selecciona</option>
-              </select>
-            </li>
-            <br>-->
+           
             
           </ul><!-- /.sidebar-menu -->
         </section>
